@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.add('js');</script>
+<title>Wedding Career Profiler — IIWM Bangalore</title>
+<meta name="description" content="Take IIWM Bangalore's Wedding Career Profiler — a 5-minute assessment matching you to your ideal wedding industry career path.">
+<meta name="theme-color" content="#F7F2E9">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/iiwm-mark.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/iiwm-mark.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/quiz.css">
+</head>
+<body class="quiz-body">
+
+<noscript>
+  <div style="padding:48px 24px;text-align:center;font-family:sans-serif;color:#201810;">
+    This assessment requires JavaScript. Please enable it in your browser to continue,
+    or <a href="index.html" style="color:#A9834F;">return to the IIWM Bangalore homepage</a>.
+  </div>
+</noscript>
+
+<div class="quiz-app" id="quizApp">
+
+  <div class="quiz-topbar" id="quizTopbar" hidden>
+    <button type="button" class="quiz-exit" id="quizExit" aria-label="Exit to homepage">&times;</button>
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progressFill"></div></div>
+      <span class="quiz-progress-label" id="progressLabel"></span>
+    </div>
+  </div>
+
+  <main class="quiz-main">
+
+    <section class="quiz-screen quiz-landing" id="screenLanding">
+      <div class="quiz-landing-inner">
+        <img class="quiz-landing-mark" src="assets/iiwm-mark.png" alt="" width="40" height="36">
+        <p class="quiz-eyebrow">IIWM Bangalore Presents</p>
+        <h1 class="quiz-landing-title">The Wedding<br>Career Profiler</h1>
+        <p class="quiz-landing-desc">A five-minute assessment matching your personality, interests and natural skills to the wedding industry career path where you'll thrive most.</p>
+        <ul class="quiz-landing-meta">
+          <li>38 quick questions</li>
+          <li>~5 minutes</li>
+          <li>Personalized results</li>
+        </ul>
+        <button type="button" class="quiz-btn-primary" id="startBtn">Begin Assessment</button>
+        <a class="quiz-landing-back" href="index.html">&larr; Back to IIWM Bangalore</a>
+      </div>
+    </section>
+
+    <section class="quiz-screen quiz-question" id="screenQuestion" hidden>
+      <div class="quiz-question-inner" id="questionInner"></div>
+    </section>
+
+    <section class="quiz-screen quiz-lead" id="screenLead" hidden>
+      <div class="quiz-lead-inner">
+        <p class="quiz-eyebrow">Last Step</p>
+        <h2 class="quiz-lead-title">Where should we send your results?</h2>
+        <p class="quiz-lead-desc">Enter your details to reveal your personalized career match report.</p>
+        <form id="leadForm" class="quiz-lead-form" novalidate>
+          <div class="quiz-field">
+            <label for="leadName">Full Name</label>
+            <input type="text" id="leadName" name="name" autocomplete="name" required>
+            <span class="quiz-field-error" id="nameError"></span>
+          </div>
+          <div class="quiz-field">
+            <label for="leadEmail">Email Address</label>
+            <input type="email" id="leadEmail" name="email" autocomplete="email" required>
+            <span class="quiz-field-error" id="emailError"></span>
+          </div>
+          <div class="quiz-field">
+            <label for="leadPhone">Phone Number</label>
+            <input type="tel" id="leadPhone" name="phone" autocomplete="tel" required>
+            <span class="quiz-field-error" id="phoneError"></span>
+          </div>
+          <button type="submit" class="quiz-btn-primary quiz-lead-submit">See My Results</button>
+        </form>
+        <button type="button" class="quiz-landing-back quiz-lead-back" id="leadBackBtn">&larr; Back to previous question</button>
+      </div>
+    </section>
+
+    <section class="quiz-screen quiz-results" id="screenResults" hidden></section>
+
+  </main>
+
+  <div class="quiz-bottombar" id="quizBottombar" hidden>
+    <button type="button" class="quiz-back" id="backBtn">&larr; Back</button>
+    <button type="button" class="quiz-next" id="nextBtn" disabled>Next</button>
+  </div>
+
+</div>
+
+<script src="js/quiz-data.js"></script>
+<script src="js/quiz.js" defer></script>
+</body>
+</html>
