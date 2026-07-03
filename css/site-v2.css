@@ -497,29 +497,33 @@ body { background: var(--ivory); }
 .ph-6 { background: linear-gradient(150deg, #8FA9C9, #4E6C94); }
 
 /* ===== Founder section ===== */
+/* Mobile/tablet: image floats to the right, name/role/copy text wraps
+   around it from the left (magazine-style) — image must come first in
+   the HTML for the float to affect the text that follows it. */
 .founder-v2 {
-  display: grid;
-  grid-template-columns: minmax(96px, 140px) 1fr;
-  grid-template-areas:
-    "media head"
-    "copy  copy";
-  column-gap: 20px;
-  row-gap: 22px;
-  align-items: start;
+  display: flow-root;
 }
-.founder-v2-head { grid-area: head; }
-.founder-v2-copy-wrap { grid-area: copy; }
-.founder-v2-media { grid-area: media; }
+@media (max-width: 899px) {
+  .founder-v2-media {
+    float: right;
+    width: 42%;
+    max-width: 190px;
+    margin: 0 0 18px 20px;
+  }
+}
 @media (min-width: 900px) {
   .founder-v2 {
+    display: grid;
     grid-template-columns: 1.05fr .95fr;
     grid-template-areas:
       "head media"
       "copy media";
     column-gap: 44px;
-    row-gap: 0;
     align-items: center;
   }
+  .founder-v2-head { grid-area: head; }
+  .founder-v2-copy-wrap { grid-area: copy; }
+  .founder-v2-media { grid-area: media; }
   .founder-v2.founder-v2--reverse {
     grid-template-columns: .95fr 1.05fr;
     grid-template-areas:
@@ -560,9 +564,10 @@ body { background: var(--ivory); }
 .founder-v2-actions { margin-top: 26px; }
 .founder-v2-media {
   position: relative;
-  max-width: 420px;
-  margin: 0 auto;
   padding: 6% 8% clamp(16px, 5vw, 64px);
+}
+@media (min-width: 900px) {
+  .founder-v2-media { max-width: 420px; margin: 0 auto; }
 }
 @media (max-width: 899px) {
   .founder-v2-name { font-size: clamp(22px, 6.4vw, 28px); margin-top: 8px; }
