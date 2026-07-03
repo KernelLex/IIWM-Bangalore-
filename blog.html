@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/style.css?v=4">
 <link rel="stylesheet" href="css/site-v2.css?v=2">
 </head>
-<body>
+<body class="has-mobile-apply-bar">
 
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -77,7 +77,7 @@
 
   <section class="section" data-reveal>
     <p style="font-size:13px;color:var(--muted-label);text-align:center;margin-bottom:36px">New posts publish regularly — check back soon for more.</p>
-    <div class="blog-grid">
+    <div class="blog-grid" id="blogGrid">
       <article class="blog-card">
         <div class="blog-card-media ph-1"></div>
         <div class="blog-card-body">
@@ -107,6 +107,10 @@
       </article>
     </div>
   </section>
+
+  <div class="blog-post-overlay" id="postDetailOverlay" hidden>
+    <div class="blog-post-modal" id="postDetailModal"></div>
+  </div>
 
   <section class="section" style="padding-top:0" data-reveal>
     <div class="cta-banner">
@@ -181,6 +185,14 @@
   </div>
 </footer>
 
+<div class="mobile-apply-bar">
+  <a href="contact.html">Apply Now</a>
+</div>
+
+<script type="module" src="js/analytics.js"></script>
+<script type="module" src="js/visit-popup.js"></script>
+<script type="module" src="js/admin-trigger.js"></script>
+<script type="module" src="js/blog-render.js"></script>
 <script src="js/main.js" defer></script>
 </body>
 </html>

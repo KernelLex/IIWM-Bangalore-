@@ -382,7 +382,9 @@
       matchPercentages: results.percentages,
       answers: state.answers
     };
-    if (LEADS_ENDPOINT) {
+    if (window.IIWMFirebaseSubmit) {
+      window.IIWMFirebaseSubmit(record).catch(function () { saveLeadLocally(record); });
+    } else if (LEADS_ENDPOINT) {
       fetch(LEADS_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

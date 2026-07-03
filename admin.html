@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — IIWM Bangalore</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/iiwm-mark.png" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/admin.css?v=1">
+</head>
+<body class="admin-body">
+
+<div id="adminGate" class="admin-gate"><p>Checking access…</p></div>
+
+<div id="adminApp" class="admin-app" hidden>
+  <header class="admin-header">
+    <div class="admin-header-brand">
+      <img src="assets/iiwm-mark.png" width="26" height="20" alt="">
+      <span>IIWM Admin</span>
+    </div>
+    <nav class="admin-tabs">
+      <button type="button" class="admin-tab is-active" data-tab="leads">Leads</button>
+      <button type="button" class="admin-tab" data-tab="visits">Visits</button>
+      <button type="button" class="admin-tab" data-tab="blogs">Blogs</button>
+    </nav>
+    <button type="button" class="admin-logout" id="adminLogout">Log Out</button>
+  </header>
+
+  <main class="admin-main">
+
+    <section class="admin-panel is-active" id="panelLeads">
+      <div class="admin-panel-head">
+        <h2>Quiz Leads</h2>
+        <p class="admin-panel-sub" id="quizLeadsCount"></p>
+      </div>
+      <div class="admin-table-wrap" id="quizLeadsTableWrap">
+        <p class="admin-empty">Loading…</p>
+      </div>
+
+      <div class="admin-panel-head" style="margin-top:44px">
+        <h2>Contact Us Leads</h2>
+        <p class="admin-panel-sub" id="contactLeadsCount"></p>
+      </div>
+      <div class="admin-table-wrap" id="contactLeadsTableWrap">
+        <p class="admin-empty">Loading…</p>
+      </div>
+    </section>
+
+    <section class="admin-panel" id="panelVisits">
+      <div class="admin-panel-head">
+        <h2>Site Visits</h2>
+        <p class="admin-panel-sub" id="visitsCount"></p>
+      </div>
+      <div class="admin-table-wrap" id="visitsTableWrap">
+        <p class="admin-empty">Loading…</p>
+      </div>
+    </section>
+
+    <section class="admin-panel" id="panelBlogs">
+      <div class="admin-panel-head">
+        <h2>Blog Posts</h2>
+        <button type="button" class="btn-admin-primary" id="newBlogBtn">+ New Post</button>
+      </div>
+      <div id="blogsListWrap"></div>
+      <div id="blogEditorWrap" hidden></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="admin-modal-overlay" id="leadDetailOverlay" hidden>
+  <div class="admin-modal" id="leadDetailModal"></div>
+</div>
+
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

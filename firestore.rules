@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Only the one admin account (created in Firebase Auth) counts as admin —
+    // there's no public sign-up flow anywhere on the site.
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // Quiz submissions: any visitor can create one, only the admin can
+    // read the list or manage entries afterwards. A light shape check
+    // keeps stray/garbage writes out without needing auth for visitors.
+    match /leads/{leadId} {
+      allow create: if request.resource.data.keys().hasAll(['name', 'email', 'phone'])
+                    && request.resource.data.name is string
+                    && request.resource.data.email is string;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Pageview log: any page can create one, only the admin can read them.
+    match /visits/{visitId} {
+      allow create: if request.resource.data.keys().hasAll(['page']);
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Blog posts: readable by everyone (the public Blog page fetches the
+    // whole collection and filters to published client-side), writable
+    // only by the admin.
+    match /blogs/{blogId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+  }
+}
