@@ -321,10 +321,38 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   transform: translateY(-3px) rotate(-45deg);
 }
 
+/* Quick-access icons shown only in the mobile header (About Us, Career
+   Profiling, Contact) — the same three pages stay reachable from the full
+   nav on desktop, so this row is hidden there to avoid duplication. */
+.mobile-quick-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-self: center;
+  grid-column: 2;
+}
+.mobile-quick-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: var(--ink);
+  transition: background-color .18s ease, color .18s ease;
+}
+.mobile-quick-links a:hover,
+.mobile-quick-links a:focus-visible {
+  background: rgba(184, 134, 63, .14);
+  color: var(--gold-text);
+}
+.mobile-quick-links svg { width: 18px; height: 18px; }
+
 @media (min-width: 900px) {
   .site-nav { display: flex; }
   .cta-pill { display: inline-block; }
   .menu-toggle { display: none; }
+  .mobile-quick-links { display: none; }
 }
 
 /* ===== Mobile / overlay menu ===== */
