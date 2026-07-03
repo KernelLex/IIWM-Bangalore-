@@ -497,33 +497,31 @@ body { background: var(--ivory); }
 .ph-6 { background: linear-gradient(150deg, #8FA9C9, #4E6C94); }
 
 /* ===== Founder section ===== */
-/* Mobile/tablet: image floats to the right, name/role/copy text wraps
-   around it from the left (magazine-style) — image must come first in
-   the HTML for the float to affect the text that follows it. */
+/* Mobile/tablet: a large photo on the right, vertically centered against
+   the name/role text on the left — grid (not float) so the image can be
+   both big and truly centered instead of pinned to the top of the text. */
 .founder-v2 {
-  display: flow-root;
+  display: grid;
+  grid-template-columns: 1fr minmax(150px, 54%);
+  grid-template-areas:
+    "head media"
+    "copy copy";
+  column-gap: 14px;
+  row-gap: 26px;
+  align-items: center;
 }
-@media (max-width: 899px) {
-  .founder-v2-media {
-    float: right;
-    width: 68%;
-    max-width: 300px;
-    margin: 0 0 18px 16px;
-  }
-}
+.founder-v2-head { grid-area: head; }
+.founder-v2-copy-wrap { grid-area: copy; }
+.founder-v2-media { grid-area: media; }
 @media (min-width: 900px) {
   .founder-v2 {
-    display: grid;
     grid-template-columns: 1.05fr .95fr;
     grid-template-areas:
       "head media"
       "copy media";
     column-gap: 44px;
-    align-items: center;
+    row-gap: 0;
   }
-  .founder-v2-head { grid-area: head; }
-  .founder-v2-copy-wrap { grid-area: copy; }
-  .founder-v2-media { grid-area: media; }
   .founder-v2.founder-v2--reverse {
     grid-template-columns: .95fr 1.05fr;
     grid-template-areas:
