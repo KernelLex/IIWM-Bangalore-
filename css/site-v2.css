@@ -503,11 +503,6 @@ body { background: var(--ivory); }
 .founder-v2-frame {
   position: relative;
   z-index: 1;
-  border: 1.5px solid var(--gold);
-  border-radius: 50% 50% 18px 18px;
-  overflow: hidden;
-  background: var(--ivory);
-  box-shadow: 0 20px 44px -20px rgba(124, 24, 48, .28);
 }
 .founder-v2-frame img {
   width: 100%;
