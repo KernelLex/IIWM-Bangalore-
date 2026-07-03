@@ -157,13 +157,18 @@
     var html = '<p class="quiz-eyebrow">' + escapeHtml(q.section) + '</p>' +
       '<h2 class="quiz-question-text">' + escapeHtml(q.text) + '</h2>';
 
+    var CHECK_ICON = '<span class="quiz-option-check"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+    var LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
+
     if (q.type === 'single') {
       html += '<div class="quiz-options" role="radiogroup">';
       q.options.forEach(function (opt, i) {
         var selected = state.answers[q.id] === i;
         html += '<button type="button" class="quiz-option' + (selected ? ' is-selected' : '') +
           '" role="radio" aria-checked="' + selected + '" data-index="' + i + '">' +
-          '<span class="quiz-option-label">' + escapeHtml(opt.label) + '</span></button>';
+          '<span class="quiz-option-badge">' + (LETTERS[i] || (i + 1)) + '</span>' +
+          '<span class="quiz-option-label">' + escapeHtml(opt.label) + '</span>' +
+          CHECK_ICON + '</button>';
       });
       html += '</div>';
     } else if (q.type === 'multi') {
@@ -175,15 +180,21 @@
         var atCap = chosen.length >= q.pick && !selected;
         html += '<button type="button" class="quiz-option' + (selected ? ' is-selected' : '') + (atCap ? ' is-disabled' : '') +
           '" aria-pressed="' + selected + '" data-index="' + i + '">' +
-          '<span class="quiz-option-label">' + escapeHtml(opt.label) + '</span></button>';
+          '<span class="quiz-option-badge">' + (LETTERS[i] || (i + 1)) + '</span>' +
+          '<span class="quiz-option-label">' + escapeHtml(opt.label) + '</span>' +
+          CHECK_ICON + '</button>';
       });
       html += '</div>';
     } else if (q.type === 'slider') {
       var value = state.answers[q.id] != null ? state.answers[q.id] : 3;
       var scale = SECTION_SCALE_LABELS[q.section] || ['Low', 'High'];
+      var fillPct = ((value - 1) / 4) * 100;
       html += '<div class="quiz-slider-wrap">' +
         '<div class="quiz-slider-value" id="sliderValue">' + value + '</div>' +
-        '<input type="range" min="1" max="5" step="1" value="' + value + '" class="quiz-slider" id="sliderInput" aria-label="' + escapeHtml(q.text) + '">' +
+        '<input type="range" min="1" max="5" step="1" value="' + value + '" class="quiz-slider" id="sliderInput" style="--fill:' + fillPct + '%" aria-label="' + escapeHtml(q.text) + '">' +
+        '<div class="quiz-slider-ticks" id="sliderTicks">' +
+        [1, 2, 3, 4, 5].map(function (n) { return '<span class="' + (n <= value ? 'is-active' : '') + '"></span>'; }).join('') +
+        '</div>' +
         '<div class="quiz-slider-scale"><span>' + escapeHtml(scale[0]) + '</span><span>' + escapeHtml(scale[1]) + '</span></div>' +
         '</div>';
       if (state.answers[q.id] == null) state.answers[q.id] = value;
@@ -248,9 +259,17 @@
     } else if (q.type === 'slider') {
       var input = document.getElementById('sliderInput');
       var valueEl = document.getElementById('sliderValue');
+      var ticksEl = document.getElementById('sliderTicks');
       input.addEventListener('input', function () {
-        state.answers[q.id] = parseInt(input.value, 10);
+        var val = parseInt(input.value, 10);
+        state.answers[q.id] = val;
         valueEl.textContent = input.value;
+        input.style.setProperty('--fill', ((val - 1) / 4) * 100 + '%');
+        if (ticksEl) {
+          Array.prototype.forEach.call(ticksEl.children, function (tick, i) {
+            tick.classList.toggle('is-active', i + 1 <= val);
+          });
+        }
       });
     }
   }

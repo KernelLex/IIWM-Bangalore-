@@ -39,10 +39,12 @@
 <div class="quiz-app" id="quizApp">
 
   <div class="quiz-topbar" id="quizTopbar" hidden>
-    <button type="button" class="quiz-exit" id="quizExit" aria-label="Exit to homepage">&times;</button>
-    <div class="quiz-progress-wrap">
-      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progressFill"></div></div>
-      <span class="quiz-progress-label" id="progressLabel"></span>
+    <div class="quiz-topbar-inner">
+      <button type="button" class="quiz-exit" id="quizExit" aria-label="Exit to homepage">&times;</button>
+      <div class="quiz-progress-wrap">
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progressFill"></div></div>
+        <span class="quiz-progress-label" id="progressLabel"></span>
+      </div>
     </div>
   </div>
 
@@ -100,8 +102,10 @@
   </main>
 
   <div class="quiz-bottombar" id="quizBottombar" hidden>
-    <button type="button" class="quiz-back" id="backBtn">&larr; Back</button>
-    <button type="button" class="quiz-next" id="nextBtn" disabled>Next</button>
+    <div class="quiz-bottombar-inner">
+      <button type="button" class="quiz-back" id="backBtn">&larr; Back</button>
+      <button type="button" class="quiz-next" id="nextBtn" disabled>Next</button>
+    </div>
   </div>
 
 </div>
