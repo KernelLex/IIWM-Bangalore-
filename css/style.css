@@ -79,34 +79,34 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   animation: preloader-in 1s cubic-bezier(.19, 1, .22, 1) .1s forwards;
 }
 .preloader-logo {
-  width: clamp(76px, 14vw, 126px);
+  width: clamp(160px, 26vw, 260px);
   height: auto;
-  filter: drop-shadow(0 10px 22px rgba(140, 35, 51, .18));
+  filter: drop-shadow(0 14px 30px rgba(140, 35, 51, .2));
   animation: preloader-breathe 2.1s ease-in-out .9s infinite;
-  mask-image: radial-gradient(ellipse at 50% 48%, #000 62%, transparent 86%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 48%, #000 62%, transparent 86%);
+  mask-image: radial-gradient(ellipse at 50% 48%, #000 66%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 48%, #000 66%, transparent 90%);
 }
 .preloader-word {
   font-family: var(--font-serif);
   font-weight: 500;
-  font-size: clamp(20px, 3.4vw, 26px);
-  letter-spacing: .22em;
+  font-size: clamp(28px, 4.6vw, 38px);
+  letter-spacing: .24em;
   color: var(--ink);
-  margin-top: 18px;
+  margin-top: 24px;
   line-height: 1;
 }
 .preloader-sub {
   font-family: var(--font-sans);
-  font-size: 10px;
-  letter-spacing: .34em;
+  font-size: 12px;
+  letter-spacing: .38em;
   color: var(--gold-text);
-  margin-top: 8px;
+  margin-top: 10px;
 }
 .preloader-rule {
   width: 0;
   height: 1px;
   background: var(--gold);
-  margin-top: 20px;
+  margin-top: 26px;
   animation: preloader-rule-grow 1s cubic-bezier(.45, 0, .2, 1) .5s forwards;
 }
 @keyframes preloader-in {
@@ -117,7 +117,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   50% { transform: scale(1.045); opacity: .88; }
 }
 @keyframes preloader-rule-grow {
-  to { width: 130px; }
+  to { width: 170px; }
 }
 @keyframes preloader-out {
   0%, 82% { opacity: 1; visibility: visible; }
