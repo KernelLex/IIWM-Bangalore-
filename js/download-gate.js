@@ -82,7 +82,9 @@ import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/fir
     submitBtn.disabled = true;
     submitBtn.textContent = 'Please wait…';
 
-    var record = { name: name, phone: phone, source: 'Brochure Download', resource: pendingResource };
+    /* email must be present (as a string) for the Firestore rules' lead
+       shape check — the gate form intentionally only asks name + phone. */
+    var record = { name: name, phone: phone, email: '', source: 'Brochure Download', resource: pendingResource };
 
     addDoc(collection(db, 'leads'), Object.assign({}, record, { submittedAt: serverTimestamp() }))
       .catch(function () { saveLocally(Object.assign({}, record, { submittedAt: new Date().toISOString() })); })

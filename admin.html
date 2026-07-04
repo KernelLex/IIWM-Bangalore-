@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css?v=5">
-<link rel="stylesheet" href="css/admin.css?v=1">
+<link rel="stylesheet" href="css/admin.css?v=2">
 </head>
 <body class="admin-body">
 
@@ -35,9 +35,36 @@
   <main class="admin-main">
 
     <section class="admin-panel is-active" id="panelLeads">
+      <div class="admin-stats-row">
+        <div class="admin-stat-card">
+          <span class="admin-stat-num" id="statQuiz">—</span>
+          <span class="admin-stat-label">Quiz Leads</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-num" id="statContact">—</span>
+          <span class="admin-stat-label">Contact Enquiries</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-num" id="statBrochure">—</span>
+          <span class="admin-stat-label">Brochure Downloads</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-num" id="statPdf">—</span>
+          <span class="admin-stat-label">PDF Reports</span>
+        </div>
+      </div>
+
+      <div class="admin-toolbar">
+        <input type="search" id="leadSearch" class="admin-search" placeholder="Search leads by name, phone or email…" aria-label="Search leads">
+        <button type="button" class="btn-admin-ghost" id="refreshLeadsBtn">Refresh</button>
+      </div>
+
       <div class="admin-panel-head">
         <h2>Quiz Leads</h2>
-        <p class="admin-panel-sub" id="quizLeadsCount"></p>
+        <div class="admin-panel-head-actions">
+          <p class="admin-panel-sub" id="quizLeadsCount"></p>
+          <button type="button" class="btn-admin-ghost btn-admin-sm" data-export="quiz">Export CSV</button>
+        </div>
       </div>
       <div class="admin-table-wrap" id="quizLeadsTableWrap">
         <p class="admin-empty">Loading…</p>
@@ -45,7 +72,10 @@
 
       <div class="admin-panel-head" style="margin-top:44px">
         <h2>PDF Downloads</h2>
-        <p class="admin-panel-sub" id="pdfDownloadsCount"></p>
+        <div class="admin-panel-head-actions">
+          <p class="admin-panel-sub" id="pdfDownloadsCount"></p>
+          <button type="button" class="btn-admin-ghost btn-admin-sm" data-export="pdf">Export CSV</button>
+        </div>
       </div>
       <div class="admin-table-wrap" id="pdfDownloadsTableWrap">
         <p class="admin-empty">Loading…</p>
@@ -53,7 +83,10 @@
 
       <div class="admin-panel-head" style="margin-top:44px">
         <h2>Brochure Downloads</h2>
-        <p class="admin-panel-sub" id="brochureLeadsCount"></p>
+        <div class="admin-panel-head-actions">
+          <p class="admin-panel-sub" id="brochureLeadsCount"></p>
+          <button type="button" class="btn-admin-ghost btn-admin-sm" data-export="brochure">Export CSV</button>
+        </div>
       </div>
       <div class="admin-table-wrap" id="brochureLeadsTableWrap">
         <p class="admin-empty">Loading…</p>
@@ -61,7 +94,10 @@
 
       <div class="admin-panel-head" style="margin-top:44px">
         <h2>Contact Us Leads</h2>
-        <p class="admin-panel-sub" id="contactLeadsCount"></p>
+        <div class="admin-panel-head-actions">
+          <p class="admin-panel-sub" id="contactLeadsCount"></p>
+          <button type="button" class="btn-admin-ghost btn-admin-sm" data-export="contact">Export CSV</button>
+        </div>
       </div>
       <div class="admin-table-wrap" id="contactLeadsTableWrap">
         <p class="admin-empty">Loading…</p>
@@ -73,7 +109,7 @@
         <h2>Site Visits</h2>
         <p class="admin-panel-sub" id="visitsCount"></p>
       </div>
-      <div class="admin-table-wrap" id="visitsTableWrap">
+      <div id="visitsContent">
         <p class="admin-empty">Loading…</p>
       </div>
     </section>
@@ -94,6 +130,6 @@
   <div class="admin-modal" id="leadDetailModal"></div>
 </div>
 
-<script type="module" src="js/admin.js"></script>
+<script type="module" src="js/admin.js?v=2"></script>
 </body>
 </html>

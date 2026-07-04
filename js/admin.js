@@ -28,6 +28,7 @@ function initDashboard() {
   if (dashboardStarted) return;
   dashboardStarted = true;
   initTabs();
+  initLeadsToolbar();
   initLeads();
   initPdfDownloads();
   initVisits();
@@ -65,6 +66,42 @@ var leadsById = {};
 var quizLeadsCache = [];
 var contactLeadsCache = [];
 var brochureLeadsCache = [];
+var pdfDownloadsCache = [];
+var leadSearchTerm = '';
+
+/* Search box + refresh + CSV export buttons above the lead tables. */
+function initLeadsToolbar() {
+  var searchEl = document.getElementById('leadSearch');
+  searchEl.addEventListener('input', function () {
+    leadSearchTerm = searchEl.value.trim().toLowerCase();
+    renderAllLeadTables();
+    renderPdfDownloadsTable();
+  });
+  document.getElementById('refreshLeadsBtn').addEventListener('click', function () {
+    document.getElementById('quizLeadsTableWrap').innerHTML = '<p class="admin-empty">Refreshing…</p>';
+    document.getElementById('contactLeadsTableWrap').innerHTML = '<p class="admin-empty">Refreshing…</p>';
+    document.getElementById('brochureLeadsTableWrap').innerHTML = '<p class="admin-empty">Refreshing…</p>';
+    document.getElementById('pdfDownloadsTableWrap').innerHTML = '<p class="admin-empty">Refreshing…</p>';
+    initLeads();
+    initPdfDownloads();
+  });
+  document.querySelectorAll('[data-export]').forEach(function (btn) {
+    btn.addEventListener('click', function () { exportCsv(btn.dataset.export); });
+  });
+}
+
+function matchesSearch(lead) {
+  if (!leadSearchTerm) return true;
+  return ['name', 'phone', 'email', 'resource', 'message', 'archetypeName'].some(function (field) {
+    return String(lead[field] || '').toLowerCase().indexOf(leadSearchTerm) !== -1;
+  });
+}
+
+function renderAllLeadTables() {
+  renderQuizLeadsTable();
+  renderContactLeadsTable();
+  renderBrochureLeadsTable();
+}
 
 function initLeads() {
   getDocs(query(collection(db, 'leads'), orderBy('submittedAt', 'desc')))
@@ -83,9 +120,10 @@ function initLeads() {
       document.getElementById('quizLeadsCount').textContent = quizLeadsCache.length + ' total';
       document.getElementById('contactLeadsCount').textContent = contactLeadsCache.length + ' total';
       document.getElementById('brochureLeadsCount').textContent = brochureLeadsCache.length + ' total';
-      renderQuizLeadsTable();
-      renderContactLeadsTable();
-      renderBrochureLeadsTable();
+      document.getElementById('statQuiz').textContent = quizLeadsCache.length;
+      document.getElementById('statContact').textContent = contactLeadsCache.length;
+      document.getElementById('statBrochure').textContent = brochureLeadsCache.length;
+      renderAllLeadTables();
     })
     .catch(function (err) {
       var msg = '<p class="admin-empty">Couldn\'t load leads (' + escapeHtml(err.message) + ').</p>';
@@ -95,13 +133,20 @@ function initLeads() {
     });
 }
 
+function emptyOrNoMatch(cache, emptyMsg) {
+  return cache.length
+    ? '<p class="admin-empty">No matches for "' + escapeHtml(leadSearchTerm) + '".</p>'
+    : '<p class="admin-empty">' + emptyMsg + '</p>';
+}
+
 function renderQuizLeadsTable() {
   var wrap = document.getElementById('quizLeadsTableWrap');
-  if (!quizLeadsCache.length) {
-    wrap.innerHTML = '<p class="admin-empty">No quiz submissions yet.</p>';
+  var visible = quizLeadsCache.filter(matchesSearch);
+  if (!visible.length) {
+    wrap.innerHTML = emptyOrNoMatch(quizLeadsCache, 'No quiz submissions yet.');
     return;
   }
-  var rows = quizLeadsCache.map(function (lead) {
+  var rows = visible.map(function (lead) {
     return '<tr class="is-clickable" data-id="' + lead.id + '">' +
       '<td class="admin-table-name">' + escapeHtml(lead.name) + '</td>' +
       '<td>' + escapeHtml(lead.phone) + '</td>' +
@@ -118,11 +163,12 @@ function renderQuizLeadsTable() {
 
 function renderBrochureLeadsTable() {
   var wrap = document.getElementById('brochureLeadsTableWrap');
-  if (!brochureLeadsCache.length) {
-    wrap.innerHTML = '<p class="admin-empty">No brochure downloads yet.</p>';
+  var visible = brochureLeadsCache.filter(matchesSearch);
+  if (!visible.length) {
+    wrap.innerHTML = emptyOrNoMatch(brochureLeadsCache, 'No brochure downloads yet.');
     return;
   }
-  var rows = brochureLeadsCache.map(function (lead) {
+  var rows = visible.map(function (lead) {
     return '<tr class="is-clickable" data-id="' + lead.id + '">' +
       '<td class="admin-table-name">' + escapeHtml(lead.name) + '</td>' +
       '<td>' + escapeHtml(lead.phone) + '</td>' +
@@ -139,11 +185,12 @@ function renderBrochureLeadsTable() {
 
 function renderContactLeadsTable() {
   var wrap = document.getElementById('contactLeadsTableWrap');
-  if (!contactLeadsCache.length) {
-    wrap.innerHTML = '<p class="admin-empty">No Contact Us enquiries yet.</p>';
+  var visible = contactLeadsCache.filter(matchesSearch);
+  if (!visible.length) {
+    wrap.innerHTML = emptyOrNoMatch(contactLeadsCache, 'No Contact Us enquiries yet.');
     return;
   }
-  var rows = contactLeadsCache.map(function (lead) {
+  var rows = visible.map(function (lead) {
     return '<tr class="is-clickable" data-id="' + lead.id + '">' +
       '<td class="admin-table-name">' + escapeHtml(lead.name) + '</td>' +
       '<td>' + escapeHtml(lead.email) + '</td>' +
@@ -216,23 +263,25 @@ function initPdfDownloads() {
   var wrap = document.getElementById('pdfDownloadsTableWrap');
   getDocs(query(collection(db, 'pdfDownloads'), orderBy('downloadedAt', 'desc'), limit(200)))
     .then(function (snap) {
-      var downloads = [];
-      snap.forEach(function (d) { downloads.push(d.data()); });
-      document.getElementById('pdfDownloadsCount').textContent = downloads.length + ' total';
-      renderPdfDownloadsTable(downloads);
+      pdfDownloadsCache = [];
+      snap.forEach(function (d) { pdfDownloadsCache.push(d.data()); });
+      document.getElementById('pdfDownloadsCount').textContent = pdfDownloadsCache.length + ' total';
+      document.getElementById('statPdf').textContent = pdfDownloadsCache.length;
+      renderPdfDownloadsTable();
     })
     .catch(function (err) {
       wrap.innerHTML = '<p class="admin-empty">Couldn\'t load PDF downloads (' + escapeHtml(err.message) + ').</p>';
     });
 }
 
-function renderPdfDownloadsTable(downloads) {
+function renderPdfDownloadsTable() {
   var wrap = document.getElementById('pdfDownloadsTableWrap');
-  if (!downloads.length) {
-    wrap.innerHTML = '<p class="admin-empty">No PDF reports downloaded yet.</p>';
+  var visible = pdfDownloadsCache.filter(matchesSearch);
+  if (!visible.length) {
+    wrap.innerHTML = emptyOrNoMatch(pdfDownloadsCache, 'No PDF reports downloaded yet.');
     return;
   }
-  var rows = downloads.map(function (d) {
+  var rows = visible.map(function (d) {
     return '<tr>' +
       '<td class="admin-table-name">' + escapeHtml(d.name) + '</td>' +
       '<td>' + escapeHtml(d.phone) + '</td>' +
@@ -246,41 +295,123 @@ function renderPdfDownloadsTable(downloads) {
     '</tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
-/* ================= Visits ================= */
+/* ================= Visits =================
+   analytics.js logs an anonymous pageview per page load — there is no
+   visitor-identification form on the site anymore, so this tab shows
+   traffic stats (per-page counts + a recent-pageviews feed) rather than
+   filtering for an `identified` flag nothing sets. */
 function initVisits() {
-  var wrap = document.getElementById('visitsTableWrap');
-  getDocs(query(collection(db, 'visits'), orderBy('viewedAt', 'desc'), limit(200)))
+  var wrap = document.getElementById('visitsContent');
+  getDocs(query(collection(db, 'visits'), orderBy('viewedAt', 'desc'), limit(500)))
     .then(function (snap) {
-      var identified = [];
-      snap.forEach(function (d) {
-        var v = d.data();
-        if (v.identified) identified.push(v);
-      });
-      document.getElementById('visitsCount').textContent = identified.length + ' total';
-      renderVisitsTable(identified);
+      var visits = [];
+      snap.forEach(function (d) { visits.push(d.data()); });
+      document.getElementById('visitsCount').textContent =
+        visits.length + (visits.length === 500 ? '+' : '') + ' pageviews' + (visits.length === 500 ? ' (showing latest 500)' : '');
+      renderVisits(visits);
     })
     .catch(function (err) {
       wrap.innerHTML = '<p class="admin-empty">Couldn\'t load visits (' + escapeHtml(err.message) + ').</p>';
     });
 }
 
-function renderVisitsTable(visits) {
-  var wrap = document.getElementById('visitsTableWrap');
+function referrerLabel(ref) {
+  if (!ref) return 'Direct';
+  try {
+    var host = new URL(ref).hostname;
+    return host === location.hostname ? 'Internal' : host;
+  } catch (e) { return ref; }
+}
+
+function renderVisits(visits) {
+  var wrap = document.getElementById('visitsContent');
   if (!visits.length) {
-    wrap.innerHTML = '<p class="admin-empty">No visits submitted their details yet.</p>';
+    wrap.innerHTML = '<p class="admin-empty">No pageviews logged yet.</p>';
     return;
   }
-  var rows = visits.map(function (v) {
+
+  var counts = {};
+  visits.forEach(function (v) {
+    var page = v.page || '(unknown)';
+    counts[page] = (counts[page] || 0) + 1;
+  });
+  var pages = Object.keys(counts)
+    .map(function (p) { return { page: p, count: counts[p] }; })
+    .sort(function (a, b) { return b.count - a.count; });
+  var maxCount = pages[0].count;
+
+  var pageRows = pages.map(function (p) {
+    var pct = Math.round((p.count / maxCount) * 100);
+    return '<div class="admin-match-row"><span>' + escapeHtml(p.page) + '</span><span>' + p.count + '</span></div>' +
+      '<div class="admin-match-bar"><div class="admin-match-bar-fill" style="width:' + pct + '%"></div></div>';
+  }).join('');
+
+  var recentRows = visits.slice(0, 30).map(function (v) {
     return '<tr>' +
-      '<td class="admin-table-name">' + escapeHtml(v.name) + '</td>' +
-      '<td>' + escapeHtml(v.phone) + '</td>' +
-      '<td>' + escapeHtml(v.email) + '</td>' +
+      '<td class="admin-table-name">' + escapeHtml(v.page || '(unknown)') + '</td>' +
+      '<td>' + escapeHtml(referrerLabel(v.referrer)) + '</td>' +
+      '<td class="admin-table-muted">' + formatDate(v.viewedAt) + '</td>' +
       '</tr>';
   }).join('');
 
   wrap.innerHTML =
-    '<table class="admin-table"><thead><tr><th>Name</th><th>Phone</th><th>Email</th></tr></thead>' +
-    '<tbody>' + rows + '</tbody></table>';
+    '<div class="admin-visits-grid">' +
+    '<div class="admin-visits-card"><h3>Views by Page</h3>' + pageRows + '</div>' +
+    '<div class="admin-visits-card admin-visits-card--table"><h3>Recent Pageviews</h3>' +
+    '<div class="admin-table-wrap admin-table-wrap--flat">' +
+    '<table class="admin-table"><thead><tr><th>Page</th><th>Referrer</th><th>When</th></tr></thead>' +
+    '<tbody>' + recentRows + '</tbody></table>' +
+    '</div></div></div>';
+}
+
+/* ================= CSV export ================= */
+var EXPORT_CONFIGS = {
+  quiz: {
+    filename: 'iiwm-quiz-leads.csv',
+    columns: ['name', 'phone', 'archetypeName', 'submittedAt'],
+    rows: function () { return quizLeadsCache; }
+  },
+  contact: {
+    filename: 'iiwm-contact-leads.csv',
+    columns: ['name', 'email', 'phone', 'message', 'submittedAt'],
+    rows: function () { return contactLeadsCache; }
+  },
+  brochure: {
+    filename: 'iiwm-brochure-leads.csv',
+    columns: ['name', 'phone', 'resource', 'submittedAt'],
+    rows: function () { return brochureLeadsCache; }
+  },
+  pdf: {
+    filename: 'iiwm-pdf-downloads.csv',
+    columns: ['name', 'phone', 'archetypeName', 'downloadedAt'],
+    rows: function () { return pdfDownloadsCache; }
+  }
+};
+
+function csvCell(value) {
+  if (value == null) return '';
+  if (value.toDate) value = value.toDate().toISOString();
+  value = String(value);
+  return /[",\n]/.test(value) ? '"' + value.replace(/"/g, '""') + '"' : value;
+}
+
+function exportCsv(key) {
+  var config = EXPORT_CONFIGS[key];
+  if (!config) return;
+  var rows = config.rows();
+  if (!rows.length) return;
+  var lines = [config.columns.join(',')];
+  rows.forEach(function (row) {
+    lines.push(config.columns.map(function (col) { return csvCell(row[col]); }).join(','));
+  });
+  var blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = config.filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(a.href);
 }
 
 /* ================= Blogs ================= */

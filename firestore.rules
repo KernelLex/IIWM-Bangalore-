@@ -11,10 +11,12 @@ service cloud.firestore {
     // Quiz submissions: any visitor can create one, only the admin can
     // read the list or manage entries afterwards. A light shape check
     // keeps stray/garbage writes out without needing auth for visitors.
+    // Only name + phone are required — the quiz and brochure-download
+    // forms don't collect an email (the contact form still sends one).
     match /leads/{leadId} {
-      allow create: if request.resource.data.keys().hasAll(['name', 'email', 'phone'])
+      allow create: if request.resource.data.keys().hasAll(['name', 'phone'])
                     && request.resource.data.name is string
-                    && request.resource.data.email is string;
+                    && request.resource.data.phone is string;
       allow read, update, delete: if isAdmin();
     }
 

@@ -371,6 +371,9 @@
     var record = {
       name: lead.name,
       phone: lead.phone,
+      /* email must be present (as a string) for the Firestore rules' lead
+         shape check — the quiz form intentionally only asks name + phone. */
+      email: '',
       source: 'Career Profiler Quiz',
       submittedAt: new Date().toISOString(),
       archetypeCode: top.code,

@@ -76,6 +76,70 @@
   margin-bottom: 24px;
   flex-wrap: wrap;
 }
+.admin-panel-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ===== Overview stat cards ===== */
+.admin-stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+@media (min-width: 720px) {
+  .admin-stats-row { grid-template-columns: repeat(4, 1fr); }
+}
+.admin-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 10px 24px -18px rgba(43, 33, 24, .3);
+  border-top: 3px solid var(--gold);
+}
+.admin-stat-num {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--ink);
+}
+.admin-stat-label {
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-label);
+  font-weight: 500;
+}
+
+/* ===== Toolbar (search + refresh) ===== */
+.admin-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.admin-search {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 13.5px;
+  padding: 11px 16px;
+  border: 1px solid rgba(32, 24, 16, .16);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+}
+.admin-search:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(169, 131, 79, .15);
+}
+.btn-admin-sm { padding: 6px 14px; font-size: 11.5px; }
 .admin-panel-head h2 {
   font-family: var(--font-serif);
   font-weight: 600;
@@ -145,8 +209,38 @@
   vertical-align: middle;
 }
 .admin-table tr:last-child td { border-bottom: none; }
-.admin-table tr.is-clickable { cursor: pointer; transition: background-color .15s ease; }
-.admin-table tr.is-clickable:hover { background: rgba(169, 131, 79, .06); }
+.admin-table thead th { position: sticky; top: 0; background: #fff; z-index: 1; }
+.admin-table tbody tr:nth-child(even) td { background: rgba(247, 242, 233, .45); }
+.admin-table tr.is-clickable { cursor: pointer; }
+.admin-table tr.is-clickable:hover td { background: rgba(169, 131, 79, .1); }
+.admin-table-wrap { max-height: 480px; overflow-y: auto; }
+.admin-table-wrap--flat { box-shadow: none; border: 1px solid rgba(32, 24, 16, .08); }
+
+/* ===== Visits tab ===== */
+.admin-visits-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (min-width: 860px) {
+  .admin-visits-grid { grid-template-columns: 5fr 7fr; }
+}
+.admin-visits-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 12px 28px -18px rgba(43, 33, 24, .3);
+}
+.admin-visits-card h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.admin-visits-card--table { padding: 22px 16px 16px; }
+.admin-visits-card--table h3 { padding: 0 8px; }
 .admin-table-name { font-weight: 600; }
 .admin-table-muted { color: var(--muted); font-size: 12.5px; }
 .admin-pill {
