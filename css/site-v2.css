@@ -545,7 +545,18 @@ body { background: var(--ivory); }
 @media (min-width: 560px) {
   .stat-row { grid-template-columns: repeat(4, 1fr); }
 }
-.stat-col { position: relative; padding-right: 16px; }
+/* Flex column (not the icon/num spans' default inline flow) so icon → num
+   → caption always stack in a predictable block order and every column
+   in a row reports its true height to the grid — without this, columns
+   with different content lengths (e.g. a 2-line caption) could size
+   their grid row short and spill into the next section. */
+.stat-col {
+  position: relative;
+  padding-right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 @media (min-width: 560px) {
   .stat-col:not(:last-child)::after {
     content: "";
@@ -780,6 +791,28 @@ body { background: var(--ivory); }
   .founder-v2-copy { margin-top: 0; }
   .founder-v2-copy-wrap .founder-v2-copy:first-child { margin-top: 0; }
 }
+/* Phones: photo and name/role sit side by side (not stacked). Giving the
+   text column the larger share (vs. the old ~46/54 split) and trimming
+   its type sizes keeps "Meet Lakshmi Keerthi" to a clean 2-line break
+   instead of the ragged 1-word-per-line wrap the narrower column caused. */
+@media (max-width: 679px) {
+  .founder-v2 {
+    grid-template-columns: 1.3fr 1fr;
+    column-gap: 16px;
+    row-gap: 20px;
+    align-items: center;
+  }
+  .founder-v2-media {
+    padding: 4% 6% 12px;
+  }
+  .founder-v2-name { font-size: clamp(19px, 5.6vw, 23px); line-height: 1.18; margin-top: 6px; }
+  .founder-v2-role { font-size: 13px; }
+  .founder-v2-eyebrow { font-size: 9px; letter-spacing: .14em; }
+  /* `.founder-v2-media .founder-v2-blob` (extra qualifier) beats the base
+     `.founder-v2-blob` rule declared later in this file at equal
+     specificity otherwise. */
+  .founder-v2-media .founder-v2-blob { inset: -8% -6% 4%; }
+}
 .founder-v2-blob {
   position: absolute;
   inset: -14% -20% 2%;
@@ -852,6 +885,12 @@ body { background: var(--ivory); }
 }
 @media (min-width: 640px) { .footer-cols { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 1000px) { .footer-cols { grid-template-columns: repeat(4, 1fr); } }
+.footer-col {
+  /* Grid items default to a content-based min-width, so a long unbroken
+     token (the contact email) would otherwise force this column wider
+     than its track and blow out the grid horizontally on phones. */
+  min-width: 0;
+}
 .footer-col h4 {
   font-size: 11.5px;
   letter-spacing: .12em;
@@ -861,7 +900,7 @@ body { background: var(--ivory); }
   margin-bottom: 16px;
 }
 .footer-col ul { display: flex; flex-direction: column; gap: 10px; }
-.footer-col a, .footer-col li { font-size: 13px; color: var(--muted); }
+.footer-col a, .footer-col li { font-size: 13px; color: var(--muted); overflow-wrap: break-word; }
 .footer-col a:hover, .footer-col a:focus-visible { color: var(--coral); }
 .footer-col-contact li { display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
 .footer-col-contact svg { flex: none; width: 15px; height: 15px; margin-top: 2px; color: var(--gold); }
