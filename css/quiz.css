@@ -650,9 +650,16 @@
 }
 .results-cta-row .quiz-btn-primary,
 .results-cta-row .quiz-btn-secondary { text-align: center; }
+.results-footer-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+}
 .results-retake {
   display: block;
-  margin: 20px auto 0;
+  margin: 0;
   font-size: 12.5px;
   color: var(--muted-label);
   text-decoration: underline;
@@ -664,12 +671,5 @@
   .results-cta-row { flex-direction: row; }
   .results-cta-row .quiz-btn-primary,
   .results-cta-row .quiz-btn-secondary { flex: 1; }
-}
-
-/* ===== Print (Download Full Report) ===== */
-@media print {
-  .quiz-topbar, .quiz-bottombar, .results-cta-row, .results-retake { display: none !important; }
-  body { background: #fff; }
-  .result-card { break-inside: avoid; border-color: #ccc; }
-  .results-inner { max-width: 100%; padding: 0; }
+  .results-footer-row { flex-direction: row; gap: 20px; }
 }

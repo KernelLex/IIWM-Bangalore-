@@ -29,6 +29,7 @@ function initDashboard() {
   dashboardStarted = true;
   initTabs();
   initLeads();
+  initPdfDownloads();
   initVisits();
   initBlogs();
 }
@@ -63,6 +64,7 @@ function formatDate(ts) {
 var leadsById = {};
 var quizLeadsCache = [];
 var contactLeadsCache = [];
+var brochureLeadsCache = [];
 
 function initLeads() {
   getDocs(query(collection(db, 'leads'), orderBy('submittedAt', 'desc')))
@@ -70,21 +72,26 @@ function initLeads() {
       leadsById = {};
       quizLeadsCache = [];
       contactLeadsCache = [];
+      brochureLeadsCache = [];
       snap.forEach(function (d) {
         var lead = Object.assign({ id: d.id }, d.data());
         leadsById[d.id] = lead;
         if (lead.source === 'Contact Form') contactLeadsCache.push(lead);
+        else if (lead.source === 'Brochure Download') brochureLeadsCache.push(lead);
         else quizLeadsCache.push(lead);
       });
       document.getElementById('quizLeadsCount').textContent = quizLeadsCache.length + ' total';
       document.getElementById('contactLeadsCount').textContent = contactLeadsCache.length + ' total';
+      document.getElementById('brochureLeadsCount').textContent = brochureLeadsCache.length + ' total';
       renderQuizLeadsTable();
       renderContactLeadsTable();
+      renderBrochureLeadsTable();
     })
     .catch(function (err) {
       var msg = '<p class="admin-empty">Couldn\'t load leads (' + escapeHtml(err.message) + ').</p>';
       document.getElementById('quizLeadsTableWrap').innerHTML = msg;
       document.getElementById('contactLeadsTableWrap').innerHTML = msg;
+      document.getElementById('brochureLeadsTableWrap').innerHTML = msg;
     });
 }
 
@@ -97,7 +104,6 @@ function renderQuizLeadsTable() {
   var rows = quizLeadsCache.map(function (lead) {
     return '<tr class="is-clickable" data-id="' + lead.id + '">' +
       '<td class="admin-table-name">' + escapeHtml(lead.name) + '</td>' +
-      '<td>' + escapeHtml(lead.email) + '</td>' +
       '<td>' + escapeHtml(lead.phone) + '</td>' +
       '<td>' + (lead.archetypeName ? escapeHtml(lead.archetypeName) : '<span class="admin-table-muted">—</span>') + '</td>' +
       '<td class="admin-table-muted">' + formatDate(lead.submittedAt) + '</td>' +
@@ -105,7 +111,28 @@ function renderQuizLeadsTable() {
   }).join('');
   wrap.innerHTML =
     '<table class="admin-table"><thead><tr>' +
-    '<th>Name</th><th>Email</th><th>Phone</th><th>Top Match</th><th>Submitted</th>' +
+    '<th>Name</th><th>Phone</th><th>Top Match</th><th>Submitted</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table>';
+  bindLeadRowClicks(wrap);
+}
+
+function renderBrochureLeadsTable() {
+  var wrap = document.getElementById('brochureLeadsTableWrap');
+  if (!brochureLeadsCache.length) {
+    wrap.innerHTML = '<p class="admin-empty">No brochure downloads yet.</p>';
+    return;
+  }
+  var rows = brochureLeadsCache.map(function (lead) {
+    return '<tr class="is-clickable" data-id="' + lead.id + '">' +
+      '<td class="admin-table-name">' + escapeHtml(lead.name) + '</td>' +
+      '<td>' + escapeHtml(lead.phone) + '</td>' +
+      '<td>' + escapeHtml(lead.resource || '') + '</td>' +
+      '<td class="admin-table-muted">' + formatDate(lead.submittedAt) + '</td>' +
+      '</tr>';
+  }).join('');
+  wrap.innerHTML =
+    '<table class="admin-table"><thead><tr>' +
+    '<th>Name</th><th>Phone</th><th>Resource</th><th>Submitted</th>' +
     '</tr></thead><tbody>' + rows + '</tbody></table>';
   bindLeadRowClicks(wrap);
 }
@@ -162,20 +189,61 @@ function openLeadDetail(lead) {
   var messageHtml = lead.message
     ? '<div class="admin-modal-section"><h4>Message</h4><p>' + escapeHtml(lead.message) + '</p></div>'
     : '';
+  var resourceHtml = lead.resource
+    ? '<div class="admin-modal-section"><h4>Resource</h4><p>' + escapeHtml(lead.resource) + '</p></div>'
+    : '';
   var matchesSectionHtml = pctEntries.length
     ? '<div class="admin-modal-section"><h4>Top Career Matches</h4>' + matchesHtml + '</div>'
     : '';
 
+  var metaParts = [lead.email, lead.phone, lead.source].filter(Boolean).map(escapeHtml);
+  metaParts.push(formatDate(lead.submittedAt));
+
   modal.innerHTML =
     '<button type="button" class="admin-modal-close" id="leadDetailClose" aria-label="Close">&times;</button>' +
     '<h3>' + escapeHtml(lead.name) + '</h3>' +
-    '<p class="admin-modal-meta">' + escapeHtml(lead.email) + ' · ' + escapeHtml(lead.phone) + ' · ' + escapeHtml(lead.source || '') + ' · ' + formatDate(lead.submittedAt) + '</p>' +
-    messageHtml + matchesSectionHtml +
-    (messageHtml || matchesSectionHtml ? '' : '<p class="admin-table-muted">No additional details.</p>');
+    '<p class="admin-modal-meta">' + metaParts.join(' · ') + '</p>' +
+    resourceHtml + messageHtml + matchesSectionHtml +
+    (resourceHtml || messageHtml || matchesSectionHtml ? '' : '<p class="admin-table-muted">No additional details.</p>');
 
   overlay.hidden = false;
   document.getElementById('leadDetailClose').addEventListener('click', function () { overlay.hidden = true; });
   overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.hidden = true; });
+}
+
+/* ================= PDF Downloads ================= */
+function initPdfDownloads() {
+  var wrap = document.getElementById('pdfDownloadsTableWrap');
+  getDocs(query(collection(db, 'pdfDownloads'), orderBy('downloadedAt', 'desc'), limit(200)))
+    .then(function (snap) {
+      var downloads = [];
+      snap.forEach(function (d) { downloads.push(d.data()); });
+      document.getElementById('pdfDownloadsCount').textContent = downloads.length + ' total';
+      renderPdfDownloadsTable(downloads);
+    })
+    .catch(function (err) {
+      wrap.innerHTML = '<p class="admin-empty">Couldn\'t load PDF downloads (' + escapeHtml(err.message) + ').</p>';
+    });
+}
+
+function renderPdfDownloadsTable(downloads) {
+  var wrap = document.getElementById('pdfDownloadsTableWrap');
+  if (!downloads.length) {
+    wrap.innerHTML = '<p class="admin-empty">No PDF reports downloaded yet.</p>';
+    return;
+  }
+  var rows = downloads.map(function (d) {
+    return '<tr>' +
+      '<td class="admin-table-name">' + escapeHtml(d.name) + '</td>' +
+      '<td>' + escapeHtml(d.phone) + '</td>' +
+      '<td>' + (d.archetypeName ? escapeHtml(d.archetypeName) : '<span class="admin-table-muted">—</span>') + '</td>' +
+      '<td class="admin-table-muted">' + formatDate(d.downloadedAt) + '</td>' +
+      '</tr>';
+  }).join('');
+  wrap.innerHTML =
+    '<table class="admin-table"><thead><tr>' +
+    '<th>Name</th><th>Phone</th><th>Top Match</th><th>Downloaded</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
 /* ================= Visits ================= */

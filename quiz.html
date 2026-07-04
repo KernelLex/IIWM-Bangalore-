@@ -72,15 +72,11 @@
       </div>
     </section>
 
-    <section class="quiz-screen quiz-question" id="screenQuestion" hidden>
-      <div class="quiz-question-inner" id="questionInner"></div>
-    </section>
-
     <section class="quiz-screen quiz-lead" id="screenLead" hidden>
       <div class="quiz-lead-inner">
-        <p class="quiz-eyebrow">Last Step</p>
-        <h2 class="quiz-lead-title">Where should we send your results?</h2>
-        <p class="quiz-lead-desc">Enter your details to reveal your personalized career match report.</p>
+        <p class="quiz-eyebrow">Before You Begin</p>
+        <h2 class="quiz-lead-title">Let's personalize your results</h2>
+        <p class="quiz-lead-desc">Just your name and number — we'll match your answers to a career report you can keep.</p>
         <form id="leadForm" class="quiz-lead-form" novalidate>
           <div class="quiz-field">
             <label for="leadName">Full Name</label>
@@ -88,19 +84,18 @@
             <span class="quiz-field-error" id="nameError"></span>
           </div>
           <div class="quiz-field">
-            <label for="leadEmail">Email Address</label>
-            <input type="email" id="leadEmail" name="email" autocomplete="email" required>
-            <span class="quiz-field-error" id="emailError"></span>
-          </div>
-          <div class="quiz-field">
-            <label for="leadPhone">Phone Number</label>
+            <label for="leadPhone">Contact Number</label>
             <input type="tel" id="leadPhone" name="phone" autocomplete="tel" required>
             <span class="quiz-field-error" id="phoneError"></span>
           </div>
-          <button type="submit" class="quiz-btn-primary quiz-lead-submit">See My Results</button>
+          <button type="submit" class="quiz-btn-primary quiz-lead-submit">Start Assessment</button>
         </form>
-        <button type="button" class="quiz-landing-back quiz-lead-back" id="leadBackBtn">&larr; Back to previous question</button>
+        <button type="button" class="quiz-landing-back quiz-lead-back" id="leadBackBtn">&larr; Back</button>
       </div>
+    </section>
+
+    <section class="quiz-screen quiz-question" id="screenQuestion" hidden>
+      <div class="quiz-question-inner" id="questionInner"></div>
     </section>
 
     <section class="quiz-screen quiz-results" id="screenResults" hidden></section>
@@ -117,10 +112,10 @@
 </div>
 
 <script type="module" src="js/analytics.js"></script>
-<script type="module" src="js/visit-popup.js"></script>
 <script type="module" src="js/admin-trigger.js"></script>
 <script src="js/quiz-data.js"></script>
 <script type="module" src="js/quiz-submit.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="js/quiz.js" defer></script>
 </body>
 </html>

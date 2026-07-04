@@ -306,16 +306,13 @@
 
     if (name === 'landing') {
       screenLanding.hidden = false;
+    } else if (name === 'lead') {
+      screenLead.hidden = false;
     } else if (name === 'question') {
       screenQuestion.hidden = false;
       topbar.hidden = false;
       bottombar.hidden = false;
       nextBtn.textContent = (state.index === TOTAL - 1) ? 'See My Results' : 'Next';
-    } else if (name === 'lead') {
-      screenLead.hidden = false;
-      topbar.hidden = false;
-      progressFill.style.width = '100%';
-      progressLabel.textContent = 'Almost there';
     } else if (name === 'results') {
       screenResults.hidden = false;
     }
@@ -329,20 +326,21 @@
       renderQuestion();
       showScreen('question');
     } else {
-      showScreen('lead');
+      state.results = computeScores();
+      submitLead(state.lead, state.results);
+      renderResults();
+      showScreen('results');
     }
   }
 
   function goBack() {
     var onLeadScreen = !screenLead.hidden;
     if (onLeadScreen) {
-      state.index = TOTAL - 1;
-      renderQuestion();
-      showScreen('question');
+      showScreen('landing');
       return;
     }
     if (state.index === 0) {
-      showScreen('landing');
+      showScreen('lead');
       return;
     }
     state.index -= 1;
@@ -355,7 +353,6 @@
   function validateLead(data) {
     var errors = {};
     if (!data.name || data.name.trim().length < 2) errors.name = 'Please enter your full name.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || '')) errors.email = 'Please enter a valid email.';
     var digits = (data.phone || '').replace(/[^\d]/g, '');
     if (digits.length < 8) errors.phone = 'Please enter a valid phone number.';
     return errors;
@@ -373,7 +370,6 @@
     var top = results.ranked[0];
     var record = {
       name: lead.name,
-      email: lead.email,
       phone: lead.phone,
       source: 'Career Profiler Quiz',
       submittedAt: new Date().toISOString(),
@@ -401,11 +397,10 @@
       e.preventDefault();
       var data = {
         name: leadForm.elements.name.value,
-        email: leadForm.elements.email.value,
         phone: leadForm.elements.phone.value
       };
       var errors = validateLead(data);
-      ['name', 'email', 'phone'].forEach(function (field) {
+      ['name', 'phone'].forEach(function (field) {
         var el = leadForm.elements[field];
         var errEl = document.getElementById(field + 'Error');
         if (errors[field]) {
@@ -419,10 +414,9 @@
       if (Object.keys(errors).length) return;
 
       state.lead = data;
-      state.results = computeScores();
-      submitLead(data, state.results);
-      renderResults();
-      showScreen('results');
+      state.index = 0;
+      renderQuestion();
+      showScreen('question');
     });
   }
 
@@ -485,11 +479,14 @@
       '<a class="quiz-btn-primary" href="' + whatsappHref + '" target="_blank" rel="noopener">Book a Counselling Session</a>' +
       '<button type="button" class="quiz-btn-secondary" id="downloadReportBtn">Download Full Report (PDF)</button>' +
       '</div>' +
+      '<div class="results-footer-row">' +
       '<button type="button" class="results-retake" id="retakeBtn">Retake the Assessment</button>' +
+      '<a class="results-retake" href="index.html">Back to Home</a>' +
+      '</div>' +
       '</div>';
 
     document.getElementById('downloadReportBtn').addEventListener('click', function () {
-      window.print();
+      downloadResultsPdf(topArchetype, top3, state.lead, results);
     });
     document.getElementById('retakeBtn').addEventListener('click', function () {
       state.index = 0;
@@ -500,6 +497,101 @@
     });
 
     animateResultsIn();
+  }
+
+  function downloadResultsPdf(topArchetype, top3, lead, results) {
+    var jsPDFCtor = window.jspdf && window.jspdf.jsPDF;
+    if (!jsPDFCtor) return;
+
+    var doc = new jsPDFCtor({ unit: 'pt', format: 'a4' });
+    var margin = 48;
+    var pageWidth = doc.internal.pageSize.getWidth();
+    var contentWidth = pageWidth - margin * 2;
+    var y = margin;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(169, 128, 63);
+    doc.text('IIWM BANGALORE', margin, y);
+    y += 22;
+
+    doc.setFontSize(20);
+    doc.setTextColor(43, 33, 24);
+    doc.text('Wedding Career Profile', margin, y);
+    y += 26;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(90, 90, 90);
+    doc.text('Prepared for ' + (lead && lead.name ? lead.name : 'You'), margin, y);
+    y += 30;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(15);
+    doc.setTextColor(43, 33, 24);
+    var headlineLines = doc.splitTextToSize(topArchetype.headline, contentWidth);
+    doc.text(headlineLines, margin, y);
+    y += headlineLines.length * 18 + 8;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(90, 75, 60);
+    var descLines = doc.splitTextToSize(topArchetype.description, contentWidth);
+    doc.text(descLines, margin, y);
+    y += descLines.length * 15 + 22;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(43, 33, 24);
+    doc.text('Your Top 3 Career Matches', margin, y);
+    y += 18;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    top3.forEach(function (r, i) {
+      var arch = ARCHETYPES[r.code];
+      doc.text((i + 1) + '. ' + arch.name + ' — ' + r.pct + '%', margin, y);
+      y += 16;
+    });
+    y += 12;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text('Skills to Develop', margin, y);
+    y += 18;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    topArchetype.skills.forEach(function (s) {
+      var lines = doc.splitTextToSize('• ' + s, contentWidth);
+      doc.text(lines, margin, y);
+      y += lines.length * 15;
+    });
+    y += 12;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text('Recommended IIWM Path', margin, y);
+    y += 18;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    var pathLines = doc.splitTextToSize(topArchetype.path, contentWidth);
+    doc.text(pathLines, margin, y);
+
+    doc.setFontSize(9);
+    doc.setTextColor(140, 140, 140);
+    doc.text('Generated by the IIWM Bangalore Wedding Career Profiler', margin, 800);
+
+    var filenameSafe = (lead && lead.name ? lead.name.replace(/[^a-z0-9]+/gi, '-') : 'guest');
+    doc.save('IIWM-Career-Profile-' + filenameSafe + '.pdf');
+
+    if (window.IIWMFirebaseLogPdf) {
+      window.IIWMFirebaseLogPdf({
+        name: (lead && lead.name) || '',
+        phone: (lead && lead.phone) || '',
+        archetypeName: topArchetype.name,
+        matchPercentages: results.percentages
+      }).catch(function () { /* logging is best-effort — download already happened */ });
+    }
   }
 
   function animateResultsIn() {
@@ -552,9 +644,7 @@
 
   if (startBtn) {
     startBtn.addEventListener('click', function () {
-      state.index = 0;
-      renderQuestion();
-      showScreen('question');
+      showScreen('lead');
     });
   }
   if (nextBtn) nextBtn.addEventListener('click', goNext);

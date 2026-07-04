@@ -24,6 +24,14 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
+    // PDF career-report downloads: logged automatically every time a quiz
+    // taker downloads their report, so admin can see who has one. Same
+    // create-only-for-visitors pattern as leads/visits.
+    match /pdfDownloads/{downloadId} {
+      allow create: if request.resource.data.keys().hasAll(['name', 'phone']);
+      allow read, update, delete: if isAdmin();
+    }
+
     // Blog posts: readable by everyone (the public Blog page fetches the
     // whole collection and filters to published client-side), writable
     // only by the admin.
