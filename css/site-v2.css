@@ -183,10 +183,9 @@ body { background: var(--ivory); }
   overflow: hidden;
   padding: clamp(18px, 3vw, 40px) var(--side-pad) clamp(22px, 3.4vw, 44px);
 }
-/* Phones: poster layout — headline stack centered on ivory up top, the
-   info items down the left with gold circle icons, and the photo anchored
-   to the bottom-RIGHT corner (behind/beside the info list, not a full-width
-   block underneath it) like the print poster this hero is based on. */
+/* Phones: side-panel layout — headline + info list on the ivory to the
+   left, photo as a full-height panel anchored to the right (not a
+   full-width block stacked below). */
 @media (max-width: 679px) {
   .hero-fade {
     padding: 0;
@@ -195,62 +194,59 @@ body { background: var(--ivory); }
   }
 }
 
-/* Photo layer: anchored to the right, full height of the section (so it
-   also shows behind/below the stats bar like the reference). The fade is
-   two overlay gradients of the page ivory — left edge dissolves into the
-   background, plus a soft top/bottom blend. */
+/* Photo layer: anchored to the right, bleeding off the top/right/bottom
+   edges at full brightness (no overlay wash) — an organic radial mask
+   dissolves the image's own left/top edge into the ivory in an irregular,
+   cloud-like blob instead of a straight cut line, so text can sit right
+   up against (and slightly into) that soft zone with no card or divider
+   behind it. Desktop pushes the bleed and blend zone further than mobile
+   so it reads as one composition rather than two stacked panels. */
 .hero-fade-media {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  width: 64%;
+  width: 76%;
   z-index: 0;
+  -webkit-mask-image: radial-gradient(ellipse 70% 84% at 76% 52%, #000 30%, rgba(0,0,0,.75) 55%, rgba(0,0,0,.25) 80%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 84% at 76% 52%, #000 30%, rgba(0,0,0,.75) 55%, rgba(0,0,0,.25) 80%, transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 .hero-fade-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 55%;
   display: block;
 }
-.hero-fade-media::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, var(--ivory) 0%, rgba(253, 243, 236, .88) 18%, rgba(253, 243, 236, .4) 38%, rgba(253, 243, 236, 0) 58%);
-}
-.hero-fade-media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(253, 243, 236, .55) 0%, rgba(253, 243, 236, 0) 18%, rgba(253, 243, 236, 0) 72%, rgba(253, 243, 236, .85) 100%);
-}
-/* Phones: the photo stays anchored to the bottom-right corner behind the
-   info list (matching the poster and the desktop side-anchored layout) —
-   it never becomes a separate full-width block stacked below everything.
-   Only a small sliver fades at its own top-left corner so it reads bright
-   and vivid, not washed out. */
+/* Phones: the photo is a full-height panel anchored to the right edge —
+   on the side, not the bottom. Every hand-tuned gradient attempt here
+   (single ellipse, disconnected blobs, linear+circles) kept reading as a
+   fairly straight edge on this tall/narrow box — gradient math just
+   doesn't produce a genuinely irregular boundary. Switched to an SVG
+   noise filter instead: feTurbulence generates procedural noise, and
+   feDisplacementMap uses it to physically warp a straight rectangle edge
+   into a real irregular, wavy contour — the standard technique for a
+   torn-paper/cloud-edge look, and it's immune to the aspect-ratio issues
+   the gradient approach kept hitting. */
 @media (max-width: 679px) {
   .hero-fade-media {
     position: absolute;
-    top: auto; left: auto;
+    top: 0; left: auto;
     right: 0;
     bottom: 0;
-    width: 78%;
-    height: 56%;
+    width: 58%;
+    height: 100%;
     z-index: 0;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='760'%3E%3Cfilter id='e'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.03' numOctaves='3' seed='6' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='80' xChannelSelector='R' yChannelSelector='G' result='w'/%3E%3CfeGaussianBlur in='w' stdDeviation='14'/%3E%3C/filter%3E%3Crect x='70' y='-100' width='300' height='960' fill='%23fff' filter='url(%23e)'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='760'%3E%3Cfilter id='e'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.03' numOctaves='3' seed='6' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='80' xChannelSelector='R' yChannelSelector='G' result='w'/%3E%3CfeGaussianBlur in='w' stdDeviation='14'/%3E%3C/filter%3E%3Crect x='70' y='-100' width='300' height='960' fill='%23fff' filter='url(%23e)'/%3E%3C/svg%3E");
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
   }
-  .hero-fade-media img { object-position: 66% 55%; }
-  /* Left ~55% (where the info-list text sits) fades into the ivory so
-     text stays legible; the right ~45% (peacock + mandap) stays fully
-     vivid — a localized fade instead of dulling the whole photo. */
-  .hero-fade-media::before {
-    background: linear-gradient(180deg, var(--ivory) 0%, rgba(253, 243, 236, .3) 8%, rgba(253, 243, 236, 0) 18%),
-      linear-gradient(90deg, var(--ivory) 0%, rgba(253, 243, 236, .82) 28%, rgba(253, 243, 236, .3) 48%, rgba(253, 243, 236, 0) 62%);
-  }
-  .hero-fade-media::after {
-    background: none;
-  }
+  .hero-fade-media img { object-position: 50% 32%; }
   /* Thin gold hairline frame around the poster screen, like the print. */
   .hero-fade::after {
     content: "";
@@ -275,23 +271,34 @@ body { background: var(--ivory); }
 .hero-fade-vine svg { width: 100%; height: 100%; }
 .hero-fade-vine--top { top: 3%; transform: rotate(16deg); }
 .hero-fade-vine--mid { top: 46%; transform: scaleX(-1) rotate(12deg); }
-/* Phones: hide the vines entirely — they'd sit behind the text column and
-   read as clutter at this size. */
+/* Phones: scaled-down corner flourishes, matching the poster reference —
+   kept within the headline area (fixed small top offsets) rather than the
+   desktop's percentage-of-section values, since the section is now much
+   taller once the full-bleed photo block is appended below. */
 @media (max-width: 679px) {
-  .hero-fade-vine { display: none; }
+  .hero-fade-vine {
+    width: clamp(26px, 7vw, 38px);
+    height: clamp(42px, 11vw, 60px);
+    opacity: .45;
+  }
+  .hero-fade-vine--top { top: 2%; }
+  .hero-fade-vine--mid { top: 15%; }
 }
 
 .hero-fade-content {
   position: relative;
   z-index: 2;
-  max-width: min(560px, 50vw);
-  padding: clamp(24px, 4.5vw, 72px) 0 clamp(48px, 6vw, 88px);
+  max-width: min(620px, 52vw);
+  padding: clamp(32px, 6vw, 96px) 0 clamp(48px, 6vw, 88px);
 }
 @media (max-width: 679px) {
+  /* Confined to the ivory column left of the photo panel — same principle
+     as the info list below it — so no line of the headline ever crosses
+     onto the (often busy/detailed) photo and risks a legibility problem. */
   .hero-fade-content {
-    max-width: none;
+    max-width: min(62%, 240px);
     text-align: center;
-    padding: 26px var(--side-pad) 6px;
+    padding: 26px 0 6px var(--side-pad);
   }
 }
 
@@ -351,13 +358,15 @@ body { background: var(--ivory); }
   margin: 0 0 22px;
 }
 /* From 680px the copy lives in a ~50vw column — rein the poster type in
-   so the stack stays proportional inside it. */
+   so the stack stays proportional inside it. Sized larger than the old
+   pass so the composition reads as one dramatic poster rather than two
+   stacked panels, per the wider photo bleed/blend above. */
 @media (min-width: 680px) {
-  .hero-title-kicker { font-size: clamp(11px, 1.2vw, 14px); }
-  .hero-title-first { font-size: clamp(48px, 6.4vw, 92px); }
-  .hero-title-script { font-size: clamp(30px, 4vw, 56px); }
-  .hero-title-main { font-size: clamp(19px, 2.4vw, 34px); }
-  .hero-fade-tagline { font-size: clamp(14px, 1.5vw, 20px); }
+  .hero-title-kicker { font-size: clamp(11px, 1.3vw, 15px); }
+  .hero-title-first { font-size: clamp(56px, 7.4vw, 108px); }
+  .hero-title-script { font-size: clamp(34px, 4.6vw, 64px); }
+  .hero-title-main { font-size: clamp(21px, 2.7vw, 38px); }
+  .hero-fade-tagline { font-size: clamp(15px, 1.6vw, 22px); }
 }
 
 /* line — ◆ lotus ◆ — line divider under the headline */
@@ -427,8 +436,9 @@ body { background: var(--ivory); }
 }
 @media (max-width: 679px) {
   /* Poster style: a plain left-aligned column of items with gold circle
-     icons, sitting on the ivory / over the photo's faded left edge —
-     no white card. */
+     icons, confined to the ivory to the left of the photo panel (see
+     .hero-fade-media above) so it never overlaps the image's busy detail —
+     tightened row gap to match the reference's denser stack. */
   .hero-fade-stats {
     position: relative;
     z-index: 3;
@@ -437,30 +447,46 @@ body { background: var(--ivory); }
     border-radius: 0;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 11px;
     margin: 6px auto 0 var(--side-pad);
     padding: 0;
-    width: min(66%, 300px);
+    width: min(38%, 168px);
   }
   /* Doubled class keeps this above the base icon rule declared later. */
   .hero-fade-stats .hero-fade-stats-icon {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: transparent;
     border: 1.3px solid #C6812F;
-  }
-  /* Text sits partly over the vivid photo — a soft shadow keeps it
-     readable without needing a background panel or extra photo fade. */
-  .hero-fade-stats-text strong,
-  .hero-fade-stats-text {
-    text-shadow: 0 1px 8px rgba(253, 243, 236, .9), 0 1px 2px rgba(253, 243, 236, .9);
   }
 }
 @media (min-width: 680px) {
   .hero-fade-stats { grid-template-columns: repeat(4, 1fr); }
 }
 .hero-fade-stats li { display: flex; align-items: center; gap: 10px; }
+/* First stat ("Hosted at Bougainvil'La") is a link to the venue's Google
+   Maps location — same layout as the plain li's, just clickable, with a
+   subtle hover cue so it reads as a link rather than plain text. */
+.hero-fade-stats-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  transition: opacity .18s ease;
+}
+.hero-fade-stats-link:hover,
+.hero-fade-stats-link:focus-visible {
+  opacity: .82;
+}
+.hero-fade-stats-link:hover .hero-fade-stats-text strong,
+.hero-fade-stats-link:focus-visible .hero-fade-stats-text strong {
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 2px;
+}
 @media (min-width: 680px) {
   .hero-fade-stats li:not(:last-child) {
     border-right: 1px solid rgba(124, 24, 48, .12);
@@ -689,20 +715,36 @@ body { background: var(--ivory); }
 }
 .career-view-all { text-align: center; margin-top: clamp(36px, 6vw, 52px); }
 
-/* Compact 3-item preview row, shown before the full grid is revealed */
+/* All 12 career roles as tappable pills — clicking one opens the role
+   popup (see js/main.js ROLE_DATA) instead of navigating anywhere, so
+   these are <button> elements styled to look like the original plain
+   text+icon row. */
 .career-preview-row {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: clamp(18px, 4vw, 40px);
+  gap: clamp(12px, 2.4vw, 20px);
 }
 .career-preview-item {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 500;
   color: var(--ink);
+  background: var(--white);
+  border: 1px solid rgba(124, 24, 48, .1);
+  border-radius: var(--radius-pill);
+  padding: 10px 18px 10px 10px;
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.career-preview-item:hover,
+.career-preview-item:focus-visible {
+  border-color: var(--coral-soft);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-2px);
 }
 .career-preview-icon {
   flex: none;
@@ -716,6 +758,171 @@ body { background: var(--ivory); }
   justify-content: center;
 }
 .career-preview-icon svg { width: 18px; height: 18px; }
+
+/* Only the first 2 roles show by default; the rest sit in this wrapper.
+   `display: contents` (when not [hidden]) makes the wrapper invisible to
+   layout so its buttons join the same flex-wrap row as the first two —
+   the [hidden] rule needs the extra attribute-selector specificity to
+   still win while collapsed, since plain "hidden" alone would lose to
+   the unconditional `display: contents` at equal specificity otherwise. */
+.career-preview-extra { display: contents; }
+.career-preview-extra[hidden] { display: none; }
+
+.career-expand-wrap { text-align: center; margin-top: 20px; }
+.career-expand-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--coral-dark);
+}
+.career-expand-icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ivory-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  line-height: 1;
+  transition: transform .2s ease;
+}
+.career-expand-toggle[aria-expanded="true"] .career-expand-icon { transform: rotate(45deg); }
+
+/* ===== Career role popup ===== */
+.role-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+  background: rgba(32, 24, 16, .5);
+}
+.role-modal-overlay[hidden] { display: none; }
+.role-modal {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  background: var(--ivory);
+  border-radius: 20px;
+  padding: clamp(28px, 5vw, 44px);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .4);
+}
+.role-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  box-shadow: var(--shadow-soft);
+}
+.role-modal-close:hover { color: var(--coral); }
+.role-modal-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold-text);
+  font-weight: 600;
+}
+.role-modal-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(24px, 4vw, 30px);
+  color: var(--maroon);
+  margin-top: 6px;
+  line-height: 1.15;
+}
+.role-modal-tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--coral-dark);
+  margin-top: 8px;
+}
+.role-modal-summary {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(32, 24, 16, .1);
+}
+.role-modal-what {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 20px;
+}
+.role-modal-list {
+  list-style: none;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.role-modal-list li {
+  padding-left: 18px;
+  position: relative;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.role-modal-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+.role-modal-list li strong {
+  display: block;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.role-modal-list li span { color: var(--muted); }
+.role-modal-quote {
+  margin: 22px 0 0;
+  padding: 16px 20px;
+  border-left: 2px solid var(--gold);
+  background: var(--ivory-deep);
+  border-radius: 0 12px 12px 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.role-modal-closing {
+  margin-top: 18px;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--maroon);
+}
 
 /* "Click to know more" reveal: the full career-grid + View All button
    stay collapsed until the visitor opts in, keeping the section scannable
@@ -1012,6 +1219,38 @@ body { background: var(--ivory); }
 .pillar-icon svg { width: 20px; height: 20px; }
 .pillar-card h3 { font-family: var(--font-serif); font-size: 18px; font-weight: 600; color: var(--ink); }
 .pillar-card p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
+
+/* ===== Who Can Apply — audience grid ("if you see yourself in even ONE
+   of these") — same card language as .pillar-card, one card per persona
+   with an emoji instead of an icon and a short elaboration line. ===== */
+.audience-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: clamp(32px, 5vw, 48px);
+}
+@media (min-width: 640px) { .audience-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .audience-grid { grid-template-columns: repeat(3, 1fr); } }
+.audience-card {
+  background: var(--white);
+  border-radius: 18px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+}
+.audience-emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--ivory-deep);
+  font-size: 26px;
+  margin-bottom: 16px;
+}
+.audience-card h3 { font-family: var(--font-serif); font-size: 18px; font-weight: 600; color: var(--maroon); }
+.audience-card p { font-size: 13px; color: var(--muted); line-height: 1.65; margin-top: 8px; }
 
 .list-check { display: flex; flex-direction: column; gap: 14px; margin-top: 24px; }
 .list-check li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--ink); line-height: 1.5; }
