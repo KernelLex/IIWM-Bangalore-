@@ -323,9 +323,16 @@
     }).join('');
 
     roleModalBody.innerHTML =
-      '<p class="role-modal-eyebrow">The Role of a</p>' +
-      '<h3 class="role-modal-title" id="roleModalTitle">' + escapeHtml(data.title) + '</h3>' +
-      '<p class="role-modal-tagline">' + escapeHtml(data.tagline) + '</p>' +
+      '<div class="role-modal-header">' +
+        '<p class="role-modal-eyebrow">The Role of a</p>' +
+        '<h3 class="role-modal-title" id="roleModalTitle">' + escapeHtml(data.title) + '</h3>' +
+        '<p class="role-modal-tagline">' + escapeHtml(data.tagline) + '</p>' +
+        '<button type="button" class="role-modal-video-btn" data-video-soon>' +
+          '<span class="role-modal-video-icon"><svg viewBox="0 0 10 10" fill="none"><path d="M1 1l8 4-8 4V1z" fill="#fff"/></svg></span>' +
+          'Watch Video' +
+        '</button>' +
+        '<span class="video-soon-note" hidden>Video coming soon for this role</span>' +
+      '</div>' +
       '<p class="role-modal-summary">' + escapeHtml(data.summary) + '</p>' +
       '<p class="role-modal-what">What I Do</p>' +
       '<ul class="role-modal-list">' + itemsHtml + '</ul>' +
@@ -358,4 +365,18 @@
       if (e.key === 'Escape' && !roleOverlay.hidden) closeRoleModal();
     });
   }
+
+  /* ---- "Watch Video" placeholder buttons ----
+     No video is wired up yet (hero, the self-assessment banner, and each
+     role popup all have one) — clicking shows a small inline note next
+     to the button instead of navigating anywhere broken/misleading. */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('[data-video-soon]');
+    if (!btn) return;
+    e.preventDefault();
+    var note = btn.nextElementSibling;
+    if (note && note.classList.contains('video-soon-note')) {
+      note.hidden = !note.hidden;
+    }
+  });
 })();

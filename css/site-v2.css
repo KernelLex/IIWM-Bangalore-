@@ -819,6 +819,18 @@ body { background: var(--ivory); }
   padding: clamp(28px, 5vw, 44px);
   box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .4);
 }
+/* Re-plays every time the overlay's [hidden] is removed, since that's a
+   fresh display:none -> flex transition each time it opens. */
+@keyframes role-modal-in {
+  from { opacity: 0; transform: translateY(14px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.role-modal-overlay:not([hidden]) .role-modal {
+  animation: role-modal-in .28s cubic-bezier(.19, 1, .22, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .role-modal-overlay:not([hidden]) .role-modal { animation: none; }
+}
 .role-modal-close {
   position: absolute;
   top: 16px;
@@ -833,34 +845,109 @@ body { background: var(--ivory); }
   box-shadow: var(--shadow-soft);
 }
 .role-modal-close:hover { color: var(--coral); }
+
+/* Warm gradient header band (instead of plain text on ivory) — the close
+   button still sits above it since positioned elements stack above
+   normal-flow content regardless of DOM order. */
+.role-modal-header {
+  position: relative;
+  overflow: hidden;
+  margin: -4px -4px 22px;
+  padding: 24px 26px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+}
+.role-modal-header::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -15%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+  pointer-events: none;
+}
 .role-modal-eyebrow {
+  position: relative;
   font-family: var(--font-sans);
   font-size: 11px;
   letter-spacing: .22em;
   text-transform: uppercase;
-  color: var(--gold-text);
+  color: rgba(255, 255, 255, .8);
   font-weight: 600;
 }
 .role-modal-title {
+  position: relative;
   font-family: var(--font-serif);
   font-weight: 600;
   font-size: clamp(24px, 4vw, 30px);
-  color: var(--maroon);
+  color: #fff;
   margin-top: 6px;
   line-height: 1.15;
 }
 .role-modal-tagline {
+  position: relative;
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 15px;
-  color: var(--coral-dark);
+  color: rgba(255, 255, 255, .92);
   margin-top: 8px;
+}
+.role-modal-video-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, .16);
+  border: 1px solid rgba(255, 255, 255, .55);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+  transition: background-color .18s ease;
+}
+.role-modal-video-btn:hover,
+.role-modal-video-btn:focus-visible { background: rgba(255, 255, 255, .28); }
+.role-modal-video-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.role-modal-video-icon svg { width: 7px; height: 7px; }
+/* Default (for light backgrounds, e.g. the hero); dark-background
+   contexts like the modal header / cta-banner override to light text. */
+.video-soon-note {
+  display: block;
+  position: relative;
+  margin-top: 8px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+}
+/* The [hidden] attribute selector's extra specificity is needed to beat
+   the unconditional "display: block" above — otherwise an author rule
+   always wins over the browser's own [hidden] { display: none }. */
+.video-soon-note[hidden] { display: none; }
+.role-modal-header .video-soon-note,
+.cta-banner .video-soon-note {
+  color: rgba(255, 255, 255, .85);
 }
 .role-modal-summary {
   font-size: 13.5px;
   color: var(--muted);
   line-height: 1.7;
-  margin-top: 16px;
   padding-bottom: 18px;
   border-bottom: 1px solid rgba(32, 24, 16, .1);
 }
@@ -1128,6 +1215,22 @@ body { background: var(--ivory); }
 }
 .cta-banner-sub { font-size: 13.5px; margin-top: 8px; color: rgba(255, 255, 255, .9); }
 .cta-banner > * { position: relative; z-index: 1; }
+.cta-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+/* Frosted-glass secondary CTA for colored/photo backgrounds (cta-banner,
+   hero) — used for "Watch Video" next to a solid .btn--white primary. */
+.btn--ghost-light {
+  background: rgba(255, 255, 255, .16);
+  border: 1px solid rgba(255, 255, 255, .6);
+  color: var(--white);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.btn--ghost-light:hover, .btn--ghost-light:focus-visible { background: rgba(255, 255, 255, .28); }
 
 /* ===== Footer restyle (multi-column) ===== */
 .site-footer { background: var(--ivory); position: relative; overflow: hidden; }
