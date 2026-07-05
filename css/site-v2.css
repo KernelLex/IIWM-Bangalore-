@@ -245,14 +245,15 @@ body { background: var(--ivory); }
     margin-top: -88px;
   }
   .hero-fade-media img { object-position: 78% 62%; }
-  /* The fades only need to protect the text overlap band at the photo's
-     top — below it the mandap shows clear and vivid like the poster. */
+  /* One unclipped, two-directional fade so the ivory dissolves into the
+     photo smoothly on every edge of the overlap band — no hard box line.
+     Below this band the mandap shows clear and vivid like the poster. */
   .hero-fade-media::before {
-    bottom: 55%;
-    background: linear-gradient(90deg, var(--ivory) 0%, rgba(253, 243, 236, .9) 26%, rgba(253, 243, 236, .4) 48%, rgba(253, 243, 236, 0) 70%);
+    background: linear-gradient(180deg, var(--ivory) 0%, rgba(253, 243, 236, .82) 16%, rgba(253, 243, 236, .42) 30%, rgba(253, 243, 236, 0) 46%),
+      linear-gradient(90deg, var(--ivory) 0%, rgba(253, 243, 236, .88) 24%, rgba(253, 243, 236, .38) 46%, rgba(253, 243, 236, 0) 68%);
   }
   .hero-fade-media::after {
-    background: linear-gradient(180deg, var(--ivory) 0%, rgba(253, 243, 236, .85) 14%, rgba(253, 243, 236, .4) 27%, rgba(253, 243, 236, 0) 42%);
+    background: none;
   }
   /* Thin gold hairline frame around the poster screen, like the print. */
   .hero-fade::after {
