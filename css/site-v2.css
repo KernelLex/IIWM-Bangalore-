@@ -213,11 +213,11 @@ body { background: var(--ivory); }
 @media (max-width: 679px) {
   .hero-fade {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    grid-template-columns: minmax(0, .78fr) minmax(0, 1.32fr);
     grid-template-areas:
       "content content"
       "stats   media";
-    column-gap: 14px;
+    column-gap: 10px;
     row-gap: 18px;
     align-items: start;
     padding: clamp(26px, 7vw, 40px) 0 22px var(--side-pad);
@@ -252,25 +252,54 @@ body { background: var(--ivory); }
   display: block;
 }
 /* Phones: the photo is its own grid column, beside the info list — not
-   behind anything. It bleeds to the screen's right edge (no side-pad on
-   its side) and only its own inner-left edge feathers into the ivory, so
-   the two columns blend without a hard seam but the icon text always
-   sits on plain ivory, fully readable. */
+   behind anything, and shown in full (no mask/crop cutting it off or
+   leaving a visible fade edge). It bleeds to the screen's right edge (no
+   side-pad on its side); the column-gap alone separates it from the
+   text so there's no seam to blend in the first place. */
 @media (max-width: 679px) {
   .hero-fade-media {
     grid-area: media;
     position: relative;
     top: auto; left: auto; right: auto; bottom: auto;
     width: 100%;
+    max-width: 100%;
     align-self: stretch;
     min-height: 270px;
+    overflow: hidden;
     z-index: 0;
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 24%);
-    mask-image: linear-gradient(90deg, transparent 0%, #000 24%);
+    /* Slow, gradual fade-in starting right at the image's own left edge
+       (immediately beside the text column) — many soft stops instead of
+       a hard cut, so the photo builds up to full strength gradually
+       rather than snapping into view. */
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, .06) 6%,
+      rgba(0, 0, 0, .16) 14%,
+      rgba(0, 0, 0, .32) 24%,
+      rgba(0, 0, 0, .52) 34%,
+      rgba(0, 0, 0, .72) 45%,
+      rgba(0, 0, 0, .88) 56%,
+      #000 68%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, .06) 6%,
+      rgba(0, 0, 0, .16) 14%,
+      rgba(0, 0, 0, .32) 24%,
+      rgba(0, 0, 0, .52) 34%,
+      rgba(0, 0, 0, .72) 45%,
+      rgba(0, 0, 0, .88) 56%,
+      #000 68%
+    );
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
   }
-  .hero-fade-media img { object-position: 70% 55%; }
+  .hero-fade-media img {
+    max-width: 100%;
+    object-position: 70% 55%;
+  }
 }
 
 .hero-fade-vine {
