@@ -217,7 +217,7 @@ body { background: var(--ivory); }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 55%;
+  object-position: center;
   display: block;
 }
 /* Phones: the photo is a full-height panel anchored to the right edge —
@@ -246,7 +246,10 @@ body { background: var(--ivory); }
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
   }
-  .hero-fade-media img { object-position: 50% 32%; }
+  /* The narrow tall box crops most of the image's width, too much to fit
+     both peacocks — biased right to keep the right peacock + garland
+     train and the ornate dome detail in frame instead of the empty sky. */
+  .hero-fade-media img { object-position: 68% center; }
   /* Thin gold hairline frame around the poster screen, like the print. */
   .hero-fade::after {
     content: "";
@@ -1120,6 +1123,93 @@ body { background: var(--ivory); }
 }
 .founder-v2-copy + .founder-v2-copy { margin-top: 14px; }
 .founder-v2-actions { margin-top: 26px; }
+
+/* ===== Founder badge — maroon/gold "plaque" style, an ornate label under
+   the founder intro (name + role + a couple of credential lines), with a
+   short bio underneath and the existing Know More button after it. ===== */
+.founder-badge {
+  position: relative;
+  max-width: 420px;
+  margin: 28px auto 0;
+  padding: 30px 24px 26px;
+  background: var(--maroon);
+  border: 2px solid var(--gold);
+  border-radius: 20px;
+  text-align: center;
+  color: #fff;
+}
+.founder-badge::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(201, 151, 59, .55);
+  border-radius: 14px;
+  pointer-events: none;
+}
+.founder-badge-lotus {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.founder-badge-lotus svg { width: 100%; height: 100%; }
+.founder-badge-name {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(22px, 4vw, 28px);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.founder-badge-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0 8px;
+}
+.founder-badge-divider span {
+  position: relative;
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+}
+.founder-badge-divider span::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+.founder-badge-divider span:first-child::after { right: -3px; }
+.founder-badge-divider span:last-child::after { left: -3px; }
+.founder-badge-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.founder-badge-sub {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .85);
+  line-height: 1.8;
+  margin-top: 6px;
+}
+.founder-badge-bio {
+  max-width: 480px;
+  margin: 18px auto 0;
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  text-align: center;
+}
 .founder-v2-media {
   position: relative;
   padding: 6% 8% clamp(16px, 5vw, 64px);

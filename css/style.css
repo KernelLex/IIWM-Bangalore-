@@ -585,6 +585,35 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   transition: transform .18s ease;
 }
 .mobile-apply-bar a:active { transform: scale(.97); }
+/* "Watch Video" sits in a flex:1 wrapper (rather than being a direct
+   .mobile-apply-bar child like the other two) purely so its "coming
+   soon" note can float as a small tooltip above the bar instead of
+   pushing the fixed-height bar taller when it appears. */
+.mobile-bar-video-wrap { flex: 1; position: relative; display: flex; }
+.mobile-bar-video-wrap .video-soon-note {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-style: normal;
+  white-space: nowrap;
+  margin-top: 0;
+  box-shadow: 0 8px 20px -8px rgba(32, 24, 16, .4);
+}
+.mobile-bar-video-wrap .video-soon-note::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--ink);
+}
 @media (min-width: 900px) {
   .mobile-apply-bar { display: none; }
 }
