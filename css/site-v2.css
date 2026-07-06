@@ -134,6 +134,29 @@ body { background: var(--ivory); }
   text-align: center;
   color: var(--white);
 }
+/* Small back-to-home affordance on every inner page's banner. */
+.page-back-btn {
+  position: absolute;
+  top: clamp(16px, 3vw, 26px);
+  left: clamp(16px, 4vw, var(--side-pad));
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .16);
+  border: 1px solid rgba(255, 255, 255, .45);
+  color: var(--white);
+  transition: background-color .18s ease, transform .18s ease;
+}
+.page-back-btn:hover,
+.page-back-btn:focus-visible {
+  background: rgba(255, 255, 255, .32);
+  transform: translateX(-2px);
+}
+.page-back-btn svg { width: 16px; height: 16px; }
 .page-banner-eyebrow {
   font-family: var(--font-sans);
   font-size: 11px;
@@ -183,32 +206,22 @@ body { background: var(--ivory); }
   overflow: hidden;
   padding: clamp(18px, 3vw, 40px) var(--side-pad) clamp(22px, 3.4vw, 44px);
 }
-/* Phones: the photo is a full-bleed background behind the whole section
-   (not a separate block below the text) — headline and info list sit on
-   top of it, readable against an ivory scrim that fades out toward the
-   bottom so the photo is in full view again by the time you reach it,
-   letting the text and the photo both be on screen together rather than
-   requiring a scroll to see the image at all. */
+/* Phones: match the actual print poster — a full-width headline block on
+   top, then a true two-column row below it (info list on the left, photo
+   on the right, side by side, same height). The photo never sits behind
+   the text, so nothing has to fight a scrim for legibility. */
 @media (max-width: 679px) {
   .hero-fade {
-    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    grid-template-areas:
+      "content content"
+      "stats   media";
+    column-gap: 14px;
+    row-gap: 18px;
+    align-items: start;
+    padding: clamp(26px, 7vw, 40px) 0 22px var(--side-pad);
     overflow: hidden;
-    min-height: calc(100svh - 74px);
-  }
-  .hero-fade::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      var(--ivory) 0%,
-      var(--ivory) 38%,
-      rgba(253, 243, 236, .85) 50%,
-      rgba(253, 243, 236, .45) 65%,
-      transparent 82%
-    );
   }
 }
 
@@ -238,23 +251,26 @@ body { background: var(--ivory); }
   object-position: center;
   display: block;
 }
-/* Phones: the photo is a full-bleed background behind the entire section
-   — the ivory-to-transparent scrim above (.hero-fade::before) is what
-   actually fades it in/out, not a mask on the image itself. Starting the
-   photo partway down (not at the very top) keeps its busiest detail
-   (the peacock statues) roughly where the scrim has already cleared,
-   instead of wasted directly behind the opaque headline area. */
+/* Phones: the photo is its own grid column, beside the info list — not
+   behind anything. It bleeds to the screen's right edge (no side-pad on
+   its side) and only its own inner-left edge feathers into the ivory, so
+   the two columns blend without a hard seam but the icon text always
+   sits on plain ivory, fully readable. */
 @media (max-width: 679px) {
   .hero-fade-media {
-    position: absolute;
-    top: 22%;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    grid-area: media;
+    position: relative;
+    top: auto; left: auto; right: auto; bottom: auto;
     width: 100%;
+    align-self: stretch;
+    min-height: 270px;
     z-index: 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 24%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 24%);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
   }
-  .hero-fade-media img { object-position: center; }
+  .hero-fade-media img { object-position: 70% 55%; }
 }
 
 .hero-fade-vine {
@@ -295,12 +311,14 @@ body { background: var(--ivory); }
   padding: clamp(32px, 6vw, 96px) 0 clamp(48px, 6vw, 88px);
 }
 @media (max-width: 679px) {
-  /* Full-width now that the photo sits below rather than beside the copy —
-     left-aligned, spanning the ivory the same way the info list does. */
+  /* Spans both grid columns as its own full-width row above the
+     icons/photo pair — centered, like the poster (note "PROGRAM"
+     centers under "WEDDING PLANNING" rather than sharing its left edge). */
   .hero-fade-content {
+    grid-area: content;
     max-width: none;
-    text-align: left;
-    padding: 26px var(--side-pad) 0;
+    text-align: center;
+    padding: 0 var(--side-pad) 0 0;
   }
 }
 
@@ -381,7 +399,7 @@ body { background: var(--ivory); }
   margin: 18px 0 24px;
 }
 @media (max-width: 679px) {
-  .hero-fade-divider { margin: 12px 0 14px; gap: 8px; justify-content: flex-start; }
+  .hero-fade-divider { margin: 12px 0 14px; gap: 8px; justify-content: center; }
   .hero-fade-divider-line { width: clamp(34px, 9vw, 60px); }
 }
 .hero-fade-divider svg { flex: none; width: 32px; height: 18px; }
@@ -442,6 +460,7 @@ body { background: var(--ivory); }
      icons, now spanning the full ivory width (the photo sits below, not
      beside it) — tightened row gap to match the reference's dense stack. */
   .hero-fade-stats {
+    grid-area: stats;
     position: relative;
     z-index: 3;
     background: transparent;
@@ -449,19 +468,30 @@ body { background: var(--ivory); }
     border-radius: 0;
     display: flex;
     flex-direction: column;
-    gap: 13px;
-    margin: 18px 0 0;
-    padding: 0 var(--side-pad);
+    gap: 16px;
+    margin: 0;
+    padding: 0;
     width: 100%;
   }
   /* Doubled class keeps this above the base icon rule declared later. */
   .hero-fade-stats .hero-fade-stats-icon {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
+    margin-top: 2px;
     border-radius: 50%;
     background: transparent;
     border: 1.3px solid #C6812F;
   }
+  .hero-fade-stats .hero-fade-stats-icon svg { width: 16px; height: 16px; }
+  /* Icon aligns with the title's top line instead of vertically centering
+     against the whole (often multi-line) text block, matching the poster. */
+  .hero-fade-stats li,
+  .hero-fade-stats-link {
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .hero-fade-stats-text { font-size: 12px; }
+  .hero-fade-stats-text strong { font-size: 13.5px; }
 }
 @media (min-width: 680px) {
   .hero-fade-stats { grid-template-columns: repeat(4, 1fr); }
