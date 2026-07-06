@@ -183,14 +183,32 @@ body { background: var(--ivory); }
   overflow: hidden;
   padding: clamp(18px, 3vw, 40px) var(--side-pad) clamp(22px, 3.4vw, 44px);
 }
-/* Phones: side-panel layout — headline + info list on the ivory to the
-   left, photo as a full-height panel anchored to the right (not a
-   full-width block stacked below). */
+/* Phones: the photo is a full-bleed background behind the whole section
+   (not a separate block below the text) — headline and info list sit on
+   top of it, readable against an ivory scrim that fades out toward the
+   bottom so the photo is in full view again by the time you reach it,
+   letting the text and the photo both be on screen together rather than
+   requiring a scroll to see the image at all. */
 @media (max-width: 679px) {
   .hero-fade {
     padding: 0;
     overflow: hidden;
     min-height: calc(100svh - 74px);
+  }
+  .hero-fade::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--ivory) 0%,
+      var(--ivory) 38%,
+      rgba(253, 243, 236, .85) 50%,
+      rgba(253, 243, 236, .45) 65%,
+      transparent 82%
+    );
   }
 }
 
@@ -220,45 +238,23 @@ body { background: var(--ivory); }
   object-position: center;
   display: block;
 }
-/* Phones: the photo is a full-height panel anchored to the right edge —
-   on the side, not the bottom. Every hand-tuned gradient attempt here
-   (single ellipse, disconnected blobs, linear+circles) kept reading as a
-   fairly straight edge on this tall/narrow box — gradient math just
-   doesn't produce a genuinely irregular boundary. Switched to an SVG
-   noise filter instead: feTurbulence generates procedural noise, and
-   feDisplacementMap uses it to physically warp a straight rectangle edge
-   into a real irregular, wavy contour — the standard technique for a
-   torn-paper/cloud-edge look, and it's immune to the aspect-ratio issues
-   the gradient approach kept hitting. */
+/* Phones: the photo is a full-bleed background behind the entire section
+   — the ivory-to-transparent scrim above (.hero-fade::before) is what
+   actually fades it in/out, not a mask on the image itself. Starting the
+   photo partway down (not at the very top) keeps its busiest detail
+   (the peacock statues) roughly where the scrim has already cleared,
+   instead of wasted directly behind the opaque headline area. */
 @media (max-width: 679px) {
   .hero-fade-media {
     position: absolute;
-    top: 0; left: auto;
+    top: 22%;
+    left: 0;
     right: 0;
     bottom: 0;
-    width: 58%;
-    height: 100%;
+    width: 100%;
     z-index: 0;
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='760'%3E%3Cfilter id='e'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.03' numOctaves='3' seed='6' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='80' xChannelSelector='R' yChannelSelector='G' result='w'/%3E%3CfeGaussianBlur in='w' stdDeviation='14'/%3E%3C/filter%3E%3Crect x='70' y='-100' width='300' height='960' fill='%23fff' filter='url(%23e)'/%3E%3C/svg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='760'%3E%3Cfilter id='e'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.03' numOctaves='3' seed='6' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='80' xChannelSelector='R' yChannelSelector='G' result='w'/%3E%3CfeGaussianBlur in='w' stdDeviation='14'/%3E%3C/filter%3E%3Crect x='70' y='-100' width='300' height='960' fill='%23fff' filter='url(%23e)'/%3E%3C/svg%3E");
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
   }
-  /* The narrow tall box crops most of the image's width, too much to fit
-     both peacocks — biased right to keep the right peacock + garland
-     train and the ornate dome detail in frame instead of the empty sky. */
-  .hero-fade-media img { object-position: 68% center; }
-  /* Thin gold hairline frame around the poster screen, like the print. */
-  .hero-fade::after {
-    content: "";
-    position: absolute;
-    inset: 10px;
-    border: 1px solid rgba(201, 151, 59, .45);
-    pointer-events: none;
-    z-index: 4;
-  }
+  .hero-fade-media img { object-position: center; }
 }
 
 .hero-fade-vine {
@@ -284,8 +280,12 @@ body { background: var(--ivory); }
     height: clamp(42px, 11vw, 60px);
     opacity: .45;
   }
-  .hero-fade-vine--top { top: 2%; }
-  .hero-fade-vine--mid { top: 15%; }
+  /* Fixed px offsets, not percentages of the section — the section is no
+     longer one viewport tall now that the photo flows below the content
+     instead of filling the same height beside it, so a %-based offset
+     would drift far down the (much taller) stacked layout. */
+  .hero-fade-vine--top { top: 10px; }
+  .hero-fade-vine--mid { top: 190px; }
 }
 
 .hero-fade-content {
@@ -295,13 +295,12 @@ body { background: var(--ivory); }
   padding: clamp(32px, 6vw, 96px) 0 clamp(48px, 6vw, 88px);
 }
 @media (max-width: 679px) {
-  /* Confined to the ivory column left of the photo panel — same principle
-     as the info list below it — so no line of the headline ever crosses
-     onto the (often busy/detailed) photo and risks a legibility problem. */
+  /* Full-width now that the photo sits below rather than beside the copy —
+     left-aligned, spanning the ivory the same way the info list does. */
   .hero-fade-content {
-    max-width: min(62%, 240px);
-    text-align: center;
-    padding: 26px 0 6px var(--side-pad);
+    max-width: none;
+    text-align: left;
+    padding: 26px var(--side-pad) 0;
   }
 }
 
@@ -311,11 +310,12 @@ body { background: var(--ivory); }
 .hero-fade-title { margin: 0; }
 .hero-title-kicker {
   display: block;
-  font-family: var(--font-sans);
+  text-align: center;
+  font-family: var(--font-serif);
   font-weight: 600;
-  font-size: clamp(12px, 3.4vw, 15px);
-  letter-spacing: .44em;
-  text-indent: .44em;
+  font-size: clamp(19px, 5.6vw, 24px);
+  letter-spacing: .38em;
+  text-indent: .38em;
   text-transform: uppercase;
   color: var(--ink);
   margin-bottom: 4px;
@@ -354,8 +354,8 @@ body { background: var(--ivory); }
 }
 .hero-fade-tagline {
   font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: clamp(16px, 4.6vw, 20px);
+  font-weight: 600;
+  font-size: clamp(18px, 5.2vw, 23px);
   letter-spacing: .12em;
   color: var(--ink);
   margin: 0 0 22px;
@@ -365,11 +365,11 @@ body { background: var(--ivory); }
    pass so the composition reads as one dramatic poster rather than two
    stacked panels, per the wider photo bleed/blend above. */
 @media (min-width: 680px) {
-  .hero-title-kicker { font-size: clamp(11px, 1.3vw, 15px); }
+  .hero-title-kicker { font-size: clamp(18px, 2.2vw, 24px); }
   .hero-title-first { font-size: clamp(56px, 7.4vw, 108px); }
   .hero-title-script { font-size: clamp(34px, 4.6vw, 64px); }
   .hero-title-main { font-size: clamp(21px, 2.7vw, 38px); }
-  .hero-fade-tagline { font-size: clamp(15px, 1.6vw, 22px); }
+  .hero-fade-tagline { font-size: clamp(17px, 1.8vw, 24px); }
 }
 
 /* line — ◆ lotus ◆ — line divider under the headline */
@@ -381,7 +381,7 @@ body { background: var(--ivory); }
   margin: 18px 0 24px;
 }
 @media (max-width: 679px) {
-  .hero-fade-divider { margin: 12px 0 14px; gap: 8px; justify-content: center; }
+  .hero-fade-divider { margin: 12px 0 14px; gap: 8px; justify-content: flex-start; }
   .hero-fade-divider-line { width: clamp(34px, 9vw, 60px); }
 }
 .hero-fade-divider svg { flex: none; width: 32px; height: 18px; }
@@ -439,9 +439,8 @@ body { background: var(--ivory); }
 }
 @media (max-width: 679px) {
   /* Poster style: a plain left-aligned column of items with gold circle
-     icons, confined to the ivory to the left of the photo panel (see
-     .hero-fade-media above) so it never overlaps the image's busy detail —
-     tightened row gap to match the reference's denser stack. */
+     icons, now spanning the full ivory width (the photo sits below, not
+     beside it) — tightened row gap to match the reference's dense stack. */
   .hero-fade-stats {
     position: relative;
     z-index: 3;
@@ -450,10 +449,10 @@ body { background: var(--ivory); }
     border-radius: 0;
     display: flex;
     flex-direction: column;
-    gap: 11px;
-    margin: 6px auto 0 var(--side-pad);
-    padding: 0;
-    width: min(38%, 168px);
+    gap: 13px;
+    margin: 18px 0 0;
+    padding: 0 var(--side-pad);
+    width: 100%;
   }
   /* Doubled class keeps this above the base icon rule declared later. */
   .hero-fade-stats .hero-fade-stats-icon {
@@ -512,13 +511,13 @@ body { background: var(--ivory); }
   display: flex;
   flex-direction: column;
   font-family: var(--font-sans);
-  font-size: 11.5px;
-  color: var(--muted);
-  line-height: 1.4;
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.45;
 }
 .hero-fade-stats-text strong {
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 700;
+  font-size: 15.5px;
   color: var(--ink);
 }
 
@@ -1092,6 +1091,17 @@ body { background: var(--ivory); }
       "media copy";
   }
 }
+/* Homepage variant: the badge is now a small stamp overlapping the photo
+   itself (see .founder-v2-media .founder-badge below), so "media" is just
+   the photo's own column — copy (bio + actions) always stays paired with
+   head in the left column, at every width, rather than only from 900px
+   like the base rule above. */
+.founder-v2--home {
+  grid-template-areas: "head media" "copy media";
+}
+@media (min-width: 900px) {
+  .founder-v2--home .founder-v2-media { margin-bottom: 0; }
+}
 .founder-v2-eyebrow {
   font-size: 11px;
   letter-spacing: .22em;
@@ -1122,93 +1132,111 @@ body { background: var(--ivory); }
   max-width: 54ch;
 }
 .founder-v2-copy + .founder-v2-copy { margin-top: 14px; }
-.founder-v2-actions { margin-top: 26px; }
+.founder-v2-actions {
+  margin-top: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
 
 /* ===== Founder badge — maroon/gold "plaque" style, an ornate label under
    the founder intro (name + role + a couple of credential lines), with a
    short bio underneath and the existing Know More button after it. ===== */
+/* The scalloped outline is drawn as an SVG shape (three stacked paths —
+   solid fill, outer gold stroke, inset gold hairline) rather than a CSS
+   border-radius box: a real die-cut/seal silhouette needs a wavy edge
+   that border-radius can't produce, and clip-path: path() doesn't rescale
+   to the element's actual size (it's fixed to the coordinate values in
+   the path string), which would break across the different badge widths
+   used per breakpoint. An SVG with preserveAspectRatio="none" behaves
+   like a normal responsive image instead — it always stretches to fill
+   whatever box its container computes. */
 .founder-badge {
   position: relative;
-  max-width: 420px;
-  margin: 28px auto 0;
-  padding: 30px 24px 26px;
-  background: var(--maroon);
-  border: 2px solid var(--gold);
-  border-radius: 20px;
-  text-align: center;
   color: #fff;
+  text-align: center;
 }
-.founder-badge::before {
-  content: "";
+.founder-badge-shape {
   position: absolute;
-  inset: 6px;
-  border: 1px solid rgba(201, 151, 59, .55);
-  border-radius: 14px;
-  pointer-events: none;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.founder-badge-shape-fill { fill: var(--maroon); }
+.founder-badge-shape-outline {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2;
+}
+.founder-badge-shape-inline {
+  fill: none;
+  stroke: rgba(201, 151, 59, .55);
+  stroke-width: 1;
+}
+.founder-badge-content {
+  position: relative;
+  z-index: 1;
+  padding: 13% 16%;
 }
 .founder-badge-lotus {
   display: inline-flex;
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   color: var(--gold);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 .founder-badge-lotus svg { width: 100%; height: 100%; }
 .founder-badge-name {
   font-family: var(--font-serif);
   font-weight: 700;
-  font-size: clamp(22px, 4vw, 28px);
-  letter-spacing: .04em;
+  font-size: clamp(13px, 3.2vw, 19px);
+  letter-spacing: .02em;
   text-transform: uppercase;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 .founder-badge-divider {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin: 10px 0 8px;
+  gap: 6px;
+  margin: 6px 0 5px;
 }
 .founder-badge-divider span {
   position: relative;
-  width: 40px;
+  width: 20px;
   height: 1px;
   background: var(--gold);
 }
 .founder-badge-divider span::after {
   content: "";
   position: absolute;
-  top: -3px;
-  width: 6px;
-  height: 6px;
+  top: -2.5px;
+  width: 5px;
+  height: 5px;
   background: var(--gold);
   transform: rotate(45deg);
 }
-.founder-badge-divider span:first-child::after { right: -3px; }
-.founder-badge-divider span:last-child::after { left: -3px; }
+.founder-badge-divider span:first-child::after { right: -2.5px; }
+.founder-badge-divider span:last-child::after { left: -2.5px; }
 .founder-badge-title {
   font-family: var(--font-serif);
-  font-size: 15px;
-  letter-spacing: .3em;
+  font-size: clamp(9px, 2vw, 11px);
+  letter-spacing: .22em;
+  text-indent: .22em;
   text-transform: uppercase;
   color: #fff;
+  white-space: nowrap;
 }
 .founder-badge-sub {
   font-family: var(--font-sans);
-  font-size: 12px;
-  letter-spacing: .1em;
+  font-size: clamp(7.5px, 1.7vw, 9px);
+  letter-spacing: .06em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, .85);
-  line-height: 1.8;
-  margin-top: 6px;
-}
-.founder-badge-bio {
-  max-width: 480px;
-  margin: 18px auto 0;
-  font-size: 13.5px;
-  color: var(--muted);
-  line-height: 1.7;
-  text-align: center;
+  line-height: 1.6;
+  margin-top: 3px;
 }
 .founder-v2-media {
   position: relative;
@@ -1216,6 +1244,16 @@ body { background: var(--ivory); }
 }
 @media (min-width: 900px) {
   .founder-v2-media { max-width: 420px; margin: 0 auto; }
+}
+/* Badge sits below the photo (homepage variant), in normal flow — but
+   pulled up slightly so its top edge tucks a little onto the photo
+   instead of sitting with a gap underneath it. Just a light touch, not
+   the earlier version where the badge covered most of the photo. */
+.founder-v2-media .founder-badge {
+  width: 100%;
+  margin-top: -22px;
+  position: relative;
+  z-index: 2;
 }
 @media (max-width: 899px) {
   .founder-v2-name { font-size: clamp(22px, 6.4vw, 28px); margin-top: 8px; }
@@ -1245,6 +1283,27 @@ body { background: var(--ivory); }
      `.founder-v2-blob` rule declared later in this file at equal
      specificity otherwise. */
   .founder-v2-media .founder-v2-blob { inset: -8% -6% 4%; }
+}
+/* Homepage variant: the badge overlaps the photo rather than sitting
+   below it, so the media column needs meaningfully more room than the
+   plain-photo share the base rule above gives it — the badge has to hold
+   "Lakshmi Keerthi" + "Founder" + a subtitle line legibly, which a photo
+   this narrow otherwise can't accommodate. Widen media at the expense of
+   the head column, and size the badge itself down for this breakpoint so
+   it reads as a corner stamp rather than covering the whole photo. */
+@media (max-width: 679px) {
+  .founder-v2--home {
+    grid-template-columns: .8fr 1.3fr;
+  }
+  .founder-v2--home .founder-v2-media { padding: 4% 4% 12px; }
+  .founder-v2--home .founder-badge { width: clamp(140px, 45vw, 190px); }
+  .founder-v2--home .founder-badge-name { font-size: clamp(11px, 3vw, 14px); }
+  .founder-v2--home .founder-badge-title { font-size: 8px; letter-spacing: .16em; }
+  .founder-v2--home .founder-badge-sub { font-size: 6.5px; }
+  .founder-v2--home .founder-badge-lotus { width: 16px; height: 16px; margin-bottom: 2px; }
+  .founder-v2--home .founder-badge-divider { margin: 4px 0 3px; gap: 4px; }
+  .founder-v2--home .founder-badge-divider span { width: 12px; }
+  .founder-v2--home .founder-badge-content { padding: 10% 13%; }
 }
 .founder-v2-blob {
   position: absolute;
