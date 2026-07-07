@@ -1310,17 +1310,19 @@ body { background: var(--ivory); }
   white-space: nowrap;
   margin-top: 5px;
 }
-/* Small credential line under the title — kept tiny so the extra line
-   doesn't push the badge's height up, while the widened badge (below)
-   gives it enough room to sit on one line. */
+/* Credential line under the title — bold and sized close to the title
+   line now (not a faint afterthought), since "Award Winning Luxury
+   Planner" needs to actually be legible, not just present. */
 .founder-badge-sub {
   display: block;
   font-family: var(--font-sans);
-  font-size: clamp(9px, 1.7vw, 10.5px);
-  letter-spacing: .06em;
+  font-weight: 700;
+  font-size: clamp(11.5px, 2.3vw, 13.5px);
+  letter-spacing: .03em;
+  line-height: 1.25;
   text-transform: uppercase;
-  color: rgba(239, 180, 138, .68);
-  white-space: nowrap;
+  color: rgba(239, 180, 138, .92);
+  white-space: normal;
   margin-top: 4px;
 }
 .founder-v2-media {
@@ -1382,12 +1384,12 @@ body { background: var(--ivory); }
   }
   .founder-v2--home .founder-v2-media { padding: 4% 4% 12px; }
   .founder-v2--home .founder-badge {
-    width: clamp(124px, 42vw, 164px);
+    width: clamp(140px, 48vw, 180px);
     margin: -28px auto 0;
   }
   .founder-v2--home .founder-badge-name { font-size: clamp(12.5px, 3.6vw, 15.5px); }
   .founder-v2--home .founder-badge-title { font-size: 9px; letter-spacing: .16em; }
-  .founder-v2--home .founder-badge-sub { font-size: 7.5px; letter-spacing: .03em; margin-top: 3px; }
+  .founder-v2--home .founder-badge-sub { font-size: clamp(9.5px, 3vw, 11px); letter-spacing: .02em; margin-top: 3px; }
   .founder-v2--home .founder-badge-content { padding: 12% 10%; }
 }
 .founder-v2-blob {
