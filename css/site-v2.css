@@ -281,10 +281,11 @@ body { background: var(--ivory); }
     width: 100%;
     z-index: 0;
   }
-  /* Biased right of center so the visible slice keeps a peacock statue
-     and the seating/entrance under the mandap both in frame, instead of
-     the plainer mid-ceiling detail a dead-center crop lands on. */
-  .hero-fade-media img { object-position: 54% center; }
+  /* This image has two peacock statues, at roughly 44% and 83% across
+     the source photo. At the visible window's fixed 66%-of-source width,
+     76% keeps both in frame (window ~26%–92%) instead of cropping the
+     right-hand peacock off almost entirely. */
+  .hero-fade-media img { object-position: 76% center; }
 }
 
 .hero-fade-vine {
