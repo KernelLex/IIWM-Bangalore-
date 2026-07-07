@@ -309,6 +309,15 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
      equal specificity otherwise (that rule would win on source order). */
   nav.mobile-quicknav { display: none; }
 }
+/* 900–1499px (most laptop screens, incl. the common 1366px width): the
+   12-tab nav's own clamp() sizing still runs too wide to fit one row here,
+   so "Contact Us" wraps alone onto a lopsided second line. Tighten font
+   and gap specifically in this band — wide screens (>=1500px) keep the
+   more spacious clamp() values untouched. */
+@media (min-width: 900px) and (max-width: 1499px) {
+  .site-nav { gap: 6px 8px; }
+  .site-nav a { font-size: 12px; }
+}
 
 /* ===== Mobile/tablet quick-nav — sits inline in the header row itself
    (between the logo and the hamburger), not a separate strip underneath.
