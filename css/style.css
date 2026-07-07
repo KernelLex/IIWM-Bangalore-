@@ -329,7 +329,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   flex: 1 1 auto;
   justify-content: center;
   align-items: center;
-  gap: clamp(6px, 2vw, 10px);
+  gap: clamp(14px, 4.2vw, 22px);
   min-width: 0;
   overflow: hidden;
 }
@@ -345,12 +345,13 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .mobile-quicknav a:not(:last-child)::after {
   content: "\2022";
   position: absolute;
-  right: clamp(-9px, -2.4vw, -6px);
+  right: clamp(-17px, -3.8vw, -13px);
   color: var(--gold);
 }
 @media (max-width: 380px) {
-  .mobile-quicknav { gap: 5px; }
+  .mobile-quicknav { gap: 11px; }
   .mobile-quicknav a { font-size: 9px; }
+  .mobile-quicknav a:not(:last-child)::after { right: -8px; }
 }
 
 /* ===== Mobile / overlay menu ===== */
