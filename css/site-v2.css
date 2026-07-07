@@ -1286,24 +1286,29 @@ body { background: var(--ivory); }
   z-index: 1;
   padding: 14% 12%;
 }
+/* Dark-peach family for the badge's three text lines — an analogous warm
+   hue sitting between the shape's maroon fill and gold hairline, so the
+   text reads as part of the same warm palette instead of a flat white
+   overlay. Hierarchy comes from opacity: name brightest, sub most muted. */
 .founder-badge-name {
   font-family: var(--font-serif);
   font-weight: 700;
-  font-size: clamp(12px, 2.8vw, 16px);
+  font-size: clamp(16px, 3.4vw, 20px);
   letter-spacing: .02em;
   text-transform: uppercase;
   line-height: 1.15;
+  color: #EFB48A;
 }
 .founder-badge-title {
   display: block;
   font-family: var(--font-serif);
-  font-size: clamp(8px, 1.7vw, 9.5px);
+  font-size: clamp(10px, 2vw, 12.5px);
   letter-spacing: .22em;
   text-indent: .22em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, .85);
+  color: rgba(239, 180, 138, .82);
   white-space: nowrap;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 /* Small credential line under the title — kept tiny so the extra line
    doesn't push the badge's height up, while the widened badge (below)
@@ -1311,12 +1316,12 @@ body { background: var(--ivory); }
 .founder-badge-sub {
   display: block;
   font-family: var(--font-sans);
-  font-size: clamp(6.5px, 1.3vw, 7.5px);
+  font-size: clamp(9px, 1.7vw, 10.5px);
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, .78);
+  color: rgba(239, 180, 138, .68);
   white-space: nowrap;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 .founder-v2-media {
   position: relative;
@@ -1330,7 +1335,7 @@ body { background: var(--ivory); }
    laptop, and sized down so it reads as a small accent rather than a
    second block anywhere near the width of the photo. */
 .founder-v2-media .founder-badge {
-  width: 64%;
+  width: 72%;
   margin: -46px auto 0;
   position: relative;
   z-index: 2;
@@ -1377,12 +1382,12 @@ body { background: var(--ivory); }
   }
   .founder-v2--home .founder-v2-media { padding: 4% 4% 12px; }
   .founder-v2--home .founder-badge {
-    width: clamp(104px, 36vw, 140px);
+    width: clamp(124px, 42vw, 164px);
     margin: -28px auto 0;
   }
-  .founder-v2--home .founder-badge-name { font-size: clamp(9.5px, 2.6vw, 12px); }
-  .founder-v2--home .founder-badge-title { font-size: 7px; letter-spacing: .16em; }
-  .founder-v2--home .founder-badge-sub { font-size: 6px; letter-spacing: .03em; margin-top: 2px; }
+  .founder-v2--home .founder-badge-name { font-size: clamp(12.5px, 3.6vw, 15.5px); }
+  .founder-v2--home .founder-badge-title { font-size: 9px; letter-spacing: .16em; }
+  .founder-v2--home .founder-badge-sub { font-size: 7.5px; letter-spacing: .03em; margin-top: 3px; }
   .founder-v2--home .founder-badge-content { padding: 12% 10%; }
 }
 .founder-v2-blob {
