@@ -1204,6 +1204,12 @@ body { background: var(--ivory); }
   grid-template-areas: "head media" "copy media";
 }
 @media (min-width: 900px) {
+  /* Without a cap, this section stretches to the section's full padded
+     width — on wide desktops the text column (which doesn't grow past
+     its own copy/button widths) and the 420px-capped photo end up
+     stranded far apart with a huge dead gap between them. Cap and
+     center the whole grid instead so both sides sit close together. */
+  .founder-v2--home { max-width: 1000px; margin: 0 auto; }
   .founder-v2--home .founder-v2-media { margin-bottom: 0; }
 }
 .founder-v2-eyebrow {
@@ -1271,7 +1277,7 @@ body { background: var(--ivory); }
    whatever box its container computes. */
 .founder-badge {
   position: relative;
-  color: #fff;
+  color: #F1CDA0;
   text-align: center;
 }
 .founder-badge-shape {
@@ -1281,7 +1287,7 @@ body { background: var(--ivory); }
   height: 100%;
   z-index: 0;
 }
-.founder-badge-shape-fill { fill: #D9905F; }
+.founder-badge-shape-fill { fill: #5A3D2B; }
 .founder-badge-shape-outline {
   fill: none;
   stroke: var(--gold);
@@ -1297,12 +1303,11 @@ body { background: var(--ivory); }
   z-index: 1;
   padding: 14% 12%;
 }
-/* Deep-maroon family for the badge's three text lines — the badge fill
-   is now dark peach (warm/light), so text needs to run dark instead of
-   light to hold contrast. Maroon is the site's existing dark warm anchor
-   (sits opposite peach on the same warm arc from gold), which keeps the
-   badge in the same palette rather than introducing a new hue. Hierarchy
-   comes from opacity: name darkest/boldest, sub slightly softer. */
+/* Warm cream/peach family for the badge's three text lines — the badge
+   fill is a dark brown, so text needs to run light to hold contrast.
+   A cream-peach (rather than plain white) keeps it in the same warm
+   palette as the gold hairline trim. Hierarchy comes from opacity:
+   name brightest/boldest, sub slightly softer. */
 .founder-badge-name {
   font-family: var(--font-serif);
   font-weight: 700;
@@ -1310,7 +1315,7 @@ body { background: var(--ivory); }
   letter-spacing: .02em;
   text-transform: uppercase;
   line-height: 1.15;
-  color: #5C1420;
+  color: #F1CDA0;
 }
 .founder-badge-title {
   display: block;
@@ -1319,7 +1324,7 @@ body { background: var(--ivory); }
   letter-spacing: .22em;
   text-indent: .22em;
   text-transform: uppercase;
-  color: rgba(92, 20, 32, .8);
+  color: rgba(241, 205, 160, .82);
   white-space: nowrap;
   margin-top: 5px;
 }
@@ -1334,7 +1339,7 @@ body { background: var(--ivory); }
   letter-spacing: .03em;
   line-height: 1.25;
   text-transform: uppercase;
-  color: rgba(92, 20, 32, .88);
+  color: rgba(241, 205, 160, .92);
   white-space: normal;
   margin-top: 4px;
 }
