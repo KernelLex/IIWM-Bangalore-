@@ -1622,22 +1622,24 @@ body { background: var(--ivory); }
 }
 
 /* ===== Brand logo row (founder's prior ventures) ===== */
+/* Logos are pre-cropped to transparent PNGs, so they float directly on
+   the page background — no card, no seam. */
 .brand-logos-row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: stretch;
-  gap: 24px;
+  align-items: center;
+  gap: clamp(32px, 6vw, 64px);
   margin-top: clamp(32px, 5vw, 44px);
 }
 .brand-logo-card {
-  background: var(--white);
-  border-radius: 18px;
-  padding: 18px 20px;
-  box-shadow: var(--shadow-soft);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform .25s ease;
+}
+.brand-logo-card:hover {
+  transform: translateY(-3px);
 }
 .brand-logo-card img {
   display: block;
