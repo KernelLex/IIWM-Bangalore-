@@ -1638,37 +1638,23 @@ button.career-card {
 .footer-social svg { width: 14px; height: 14px; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 
-/* ===== About page brand strip (logo + full form) ===== */
-.about-brand-strip {
+/* ===== About page banner: logo beside the title, not stacked above it ===== */
+.page-banner-logo-row {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  text-align: center;
+  justify-content: center;
+  gap: clamp(14px, 2.4vw, 24px);
+  margin-bottom: 14px;
 }
-.about-brand-strip img { width: 240px; height: auto; }
-/* Sits on the page-banner's coral background, above the title — the
-   logo's maroon/navy text needs a light plate behind it to stay
-   readable against the coral, unlike the ivory-page placement. */
-.about-brand-strip--banner {
-  position: relative;
-  z-index: 2;
-  margin: 0 auto clamp(14px, 3vw, 22px);
+.page-banner-logo {
+  width: clamp(96px, 10vw, 132px);
+  height: auto;
+  flex: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .2));
 }
-.about-brand-strip--banner img {
-  width: clamp(120px, 16vw, 160px);
-  background: rgba(255, 255, 255, .92);
-  border-radius: 16px;
-  padding: 10px 14px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
-}
-.about-brand-strip p {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(15px, 2vw, 19px);
-  color: var(--maroon);
-  letter-spacing: .01em;
-}
+.page-banner-logo-text { text-align: left; }
+.page-banner-logo-text .page-banner-title { margin: 0; }
+.page-banner-logo-text .page-banner-eyebrow { margin: 6px 0 0; }
 
 /* ===== Fact grid (label/value pairs, e.g. program quick facts) ===== */
 .fact-grid {
