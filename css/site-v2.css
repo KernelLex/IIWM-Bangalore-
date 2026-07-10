@@ -1234,6 +1234,11 @@ button.career-card {
       "copy media";
     column-gap: 44px;
     row-gap: 0;
+    /* Without a cap this stretches to the section's full padded width on
+       wide desktops, leaving a large dead gap between the (intentionally
+       readable-width) bio copy and the photo column. */
+    max-width: 1180px;
+    margin: 0 auto;
   }
   .founder-v2.founder-v2--reverse {
     grid-template-columns: .95fr 1.05fr;
@@ -1299,7 +1304,7 @@ button.career-card {
   color: var(--muted);
   line-height: 1.75;
   margin-top: 20px;
-  max-width: 54ch;
+  max-width: 62ch;
 }
 .founder-v2-copy + .founder-v2-copy { margin-top: 14px; }
 .founder-v2-actions {
