@@ -139,7 +139,7 @@ body { background: var(--ivory); }
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
-  padding: clamp(56px, 10vw, 96px) var(--side-pad) clamp(48px, 8vw, 76px);
+  padding: clamp(40px, 7vw, 64px) var(--side-pad) clamp(32px, 5vw, 48px);
   text-align: center;
   color: var(--white);
 }
@@ -182,7 +182,7 @@ body { background: var(--ivory); }
 }
 .page-banner-desc {
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   max-width: 560px;
   margin: 16px auto 0;
   line-height: 1.7;
@@ -1591,7 +1591,7 @@ button.career-card {
 
 /* ===== Footer restyle (multi-column) ===== */
 .site-footer { background: var(--ivory); position: relative; overflow: hidden; }
-.footer-brand img { width: 40px; }
+.footer-brand img { width: 56px; }
 .footer-brand .wordmark-main { color: var(--maroon); }
 .footer-cols {
   display: grid;
@@ -1634,6 +1634,23 @@ button.career-card {
 }
 .footer-social svg { width: 14px; height: 14px; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+/* ===== About page brand strip (logo + full form) ===== */
+.about-brand-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+.about-brand-strip img { width: 64px; height: auto; }
+.about-brand-strip p {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(15px, 2vw, 19px);
+  color: var(--maroon);
+  letter-spacing: .01em;
+}
 
 /* ===== Fact grid (label/value pairs, e.g. program quick facts) ===== */
 .fact-grid {

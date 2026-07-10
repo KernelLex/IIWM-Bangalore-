@@ -27,7 +27,7 @@ body {
   background: var(--ivory);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-weight: 300;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
@@ -489,7 +489,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .mobile-menu a {
   font-family: var(--font-serif);
   font-size: clamp(28px, 8vw, 36px);
-  font-weight: 300;
+  font-weight: 400;
   padding: 16px 0;
   border-bottom: 1px solid rgba(32, 24, 16, .12);
 }
@@ -512,7 +512,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 
 /* ===== Section shared ===== */
 .section {
-  padding: clamp(40px, 12vw, 120px) var(--side-pad);
+  padding: clamp(32px, 7vw, 76px) var(--side-pad);
   opacity: 1;
   transform: none;
 }
@@ -535,11 +535,11 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: clamp(40px, 8vw, 72px);
+  margin-bottom: clamp(28px, 5vw, 48px);
 }
 .section-desc {
   font-size: 13px;
-  font-weight: 300;
+  font-weight: 400;
   max-width: 340px;
   line-height: 1.6;
   color: var(--muted);
@@ -567,11 +567,20 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 .footer-brand { display: flex; align-items: center; gap: 12px; }
 .footer-brand img { width: 32px; height: auto; }
+.footer-fullform {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--gold-text);
+  margin-top: 10px;
+  line-height: 1.4;
+}
 .footer-tagline {
   font-size: 13px;
   color: var(--muted);
   line-height: 1.6;
   max-width: 320px;
+  margin-top: 10px;
 }
 .footer-nav { display: flex; flex-wrap: wrap; gap: 20px 28px; }
 .footer-nav a { font-size: 12.5px; letter-spacing: .05em; }
