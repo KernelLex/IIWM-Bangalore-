@@ -1647,6 +1647,21 @@ button.career-card {
   text-align: center;
 }
 .about-brand-strip img { width: 240px; height: auto; }
+/* Sits on the page-banner's coral background, above the title — the
+   logo's maroon/navy text needs a light plate behind it to stay
+   readable against the coral, unlike the ivory-page placement. */
+.about-brand-strip--banner {
+  position: relative;
+  z-index: 2;
+  margin: 0 auto clamp(14px, 3vw, 22px);
+}
+.about-brand-strip--banner img {
+  width: clamp(120px, 16vw, 160px);
+  background: rgba(255, 255, 255, .92);
+  border-radius: 16px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
+}
 .about-brand-strip p {
   font-family: var(--font-serif);
   font-style: italic;
