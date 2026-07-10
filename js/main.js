@@ -42,6 +42,43 @@
     });
   }
 
+  /* ---- Nav dropdown (e.g. Inner Circle) ----
+     Click-to-toggle, since the trigger no longer links anywhere itself —
+     :hover/:focus-within in CSS still open it too, this just adds an
+     explicit click/tap toggle on top for pointer and touch users. */
+  document.querySelectorAll('.nav-dropdown').forEach(function (dropdown) {
+    var trigger = dropdown.querySelector('.nav-dropdown-trigger');
+    if (!trigger) return;
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = dropdown.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded', String(isOpen));
+      document.querySelectorAll('.nav-dropdown.is-open').forEach(function (other) {
+        if (other !== dropdown) {
+          other.classList.remove('is-open');
+          var otherTrigger = other.querySelector('.nav-dropdown-trigger');
+          if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  });
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.nav-dropdown.is-open').forEach(function (dropdown) {
+      dropdown.classList.remove('is-open');
+      var trigger = dropdown.querySelector('.nav-dropdown-trigger');
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.nav-dropdown.is-open').forEach(function (dropdown) {
+        dropdown.classList.remove('is-open');
+        var trigger = dropdown.querySelector('.nav-dropdown-trigger');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
   /* ---- Scroll reveal ---- */
   var revealEls = document.querySelectorAll('[data-reveal]');
   if (reduceMotion || !('IntersectionObserver' in window)) {

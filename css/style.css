@@ -229,7 +229,8 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   justify-self: center;
   grid-column: 2;
 }
-.site-nav a {
+.site-nav a,
+.site-nav .nav-dropdown-trigger {
   position: relative;
   font-size: clamp(12.5px, 1.05vw, 14px);
   font-weight: 600;
@@ -237,7 +238,8 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   padding-bottom: 5px;
   white-space: nowrap;
 }
-.site-nav a::after {
+.site-nav a::after,
+.site-nav .nav-dropdown-trigger::after {
   content: "";
   position: absolute;
   left: 0;
@@ -250,16 +252,31 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   transition: transform .32s cubic-bezier(.4, 0, .2, 1);
 }
 .site-nav a:hover::after,
-.site-nav a:focus-visible::after {
+.site-nav a:focus-visible::after,
+.site-nav .nav-dropdown-trigger:hover::after,
+.site-nav .nav-dropdown-trigger:focus-visible::after {
   transform: scaleX(1);
 }
 
 /* ===== Nav dropdown (e.g. Inner Circle members) ===== */
 .nav-dropdown { position: relative; display: flex; align-items: center; }
-.nav-dropdown-trigger { display: flex; align-items: center; gap: 4px; }
+.nav-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
 .nav-dropdown-caret { width: 8px; height: 8px; flex: none; transition: transform .2s ease; }
 .nav-dropdown:hover .nav-dropdown-caret,
-.nav-dropdown:focus-within .nav-dropdown-caret {
+.nav-dropdown:focus-within .nav-dropdown-caret,
+.nav-dropdown.is-open .nav-dropdown-caret {
   transform: rotate(180deg);
 }
 .nav-dropdown-menu {
@@ -280,7 +297,8 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   z-index: 50;
 }
 .nav-dropdown:hover .nav-dropdown-menu,
-.nav-dropdown:focus-within .nav-dropdown-menu {
+.nav-dropdown:focus-within .nav-dropdown-menu,
+.nav-dropdown.is-open .nav-dropdown-menu {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;

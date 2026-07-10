@@ -83,8 +83,10 @@ body { background: var(--ivory); }
 .site-header.is-scrolled { background: rgba(253, 243, 236, .98); }
 .wordmark-main { color: var(--maroon); }
 .site-nav a::after { background: var(--coral); }
-.site-nav a[aria-current="page"] { color: var(--coral); }
-.site-nav a[aria-current="page"]::after { transform: scaleX(1); }
+.site-nav a[aria-current="page"],
+.site-nav button[aria-current="page"] { color: var(--coral); }
+.site-nav a[aria-current="page"]::after,
+.site-nav button[aria-current="page"]::after { transform: scaleX(1); }
 .cta-pill {
   display: none;
   border: none;
