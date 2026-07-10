@@ -21,7 +21,7 @@
 
 /* ===== Reset ===== */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   margin: 0;
   background: var(--ivory);
@@ -171,8 +171,11 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   grid-template-columns: auto 1fr auto;
   align-items: center;
   column-gap: clamp(16px, 2.4vw, 24px);
-  /* Slimmer vertical padding — the enlarged logo mark carries the height. */
-  padding: 12px var(--side-pad);
+  /* Slimmer vertical padding — the enlarged logo mark carries the height.
+     Horizontal padding is intentionally narrower than the page's usual
+     --side-pad: pulling the logo and Apply Now pill closer to the edges
+     frees up real width for the nav list to breathe. */
+  padding: 12px clamp(16px, 3vw, 40px);
   background: rgba(247, 242, 233, .88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -188,15 +191,41 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   border-color: rgba(32, 24, 16, .12);
 }
 
-.wordmark {
+.header-brand {
   display: flex;
   align-items: center;
   gap: 14px;
   justify-self: start;
+}
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   transition: opacity .2s ease;
 }
 .wordmark:hover,
 .wordmark:focus-visible { opacity: .78; }
+.home-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: var(--gold-text);
+  border: 1px solid rgba(201, 151, 59, .35);
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+}
+.home-btn svg { width: 16px; height: 16px; }
+.home-btn:hover,
+.home-btn:focus-visible {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+}
+@media (min-width: 900px) {
+  .home-btn { display: inline-flex; }
+}
 .wordmark-mark {
   width: clamp(62px, 8vw, 84px);
   height: auto;
@@ -221,11 +250,11 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 
 .site-nav {
   display: none;
-  /* 12 tabs: tighter gaps, and allow a graceful wrap to a second centered
-     row on narrower desktop widths instead of overflowing. */
+  /* 12 tabs: allow a graceful wrap to a second centered row on narrower
+     desktop widths instead of overflowing. */
   flex-wrap: wrap;
   justify-content: center;
-  gap: 6px clamp(12px, 1.3vw, 22px);
+  gap: 10px clamp(16px, 1.8vw, 28px);
   justify-self: center;
   grid-column: 2;
 }
@@ -395,8 +424,9 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
    and gap specifically in this band — wide screens (>=1500px) keep the
    more spacious clamp() values untouched. */
 @media (min-width: 900px) and (max-width: 1499px) {
-  .site-nav { gap: 6px 8px; }
-  .site-nav a { font-size: 12px; }
+  .site-nav { gap: 8px 14px; }
+  .site-nav a,
+  .site-nav .nav-dropdown-trigger { font-size: 12px; }
 }
 
 /* ===== Mobile/tablet quick-nav — sits inline in the header row itself
