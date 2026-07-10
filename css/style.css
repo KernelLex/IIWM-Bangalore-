@@ -254,7 +254,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
      desktop widths instead of overflowing. */
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px clamp(16px, 1.8vw, 28px);
+  gap: 12px clamp(18px, 2vw, 30px);
   justify-self: center;
   grid-column: 2;
 }
@@ -339,7 +339,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   gap: 10px;
   padding: 7px 9px;
   border-radius: 9px;
-  font-size: 14px !important;
+  font-size: 15px !important;
   font-weight: 500 !important;
   white-space: nowrap;
 }
@@ -418,15 +418,15 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
      equal specificity otherwise (that rule would win on source order). */
   nav.mobile-quicknav { display: none; }
 }
-/* 900–1499px (most laptop screens, incl. the common 1366px width): the
-   12-tab nav's own clamp() sizing still runs too wide to fit one row here,
-   so "Contact Us" wraps alone onto a lopsided second line. Tighten font
-   and gap specifically in this band — wide screens (>=1500px) keep the
-   more spacious clamp() values untouched. */
-@media (min-width: 900px) and (max-width: 1499px) {
-  .site-nav { gap: 8px 14px; }
+/* 900–1599px (most laptop screens, incl. the common 1366px and 1536px
+   widths): the 12-tab nav's own clamp() sizing still runs too wide to
+   fit one row here, so "Contact Us" wraps alone onto a lopsided second
+   line. Tighten font and gap specifically in this band — wide screens
+   (>=1600px) keep the more spacious clamp() values untouched. */
+@media (min-width: 900px) and (max-width: 1599px) {
+  .site-nav { gap: 10px 11px; }
   .site-nav a,
-  .site-nav .nav-dropdown-trigger { font-size: 13px; }
+  .site-nav .nav-dropdown-trigger { font-size: 12.5px; }
 }
 
 /* ===== Mobile/tablet quick-nav — sits inline in the header row itself
@@ -439,7 +439,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   flex: 1 1 auto;
   justify-content: center;
   align-items: center;
-  gap: clamp(14px, 4.2vw, 22px);
+  gap: clamp(18px, 5.4vw, 28px);
   min-width: 0;
   overflow: hidden;
 }
@@ -455,13 +455,13 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .mobile-quicknav a:not(:last-child)::after {
   content: "\2022";
   position: absolute;
-  right: clamp(-17px, -3.8vw, -13px);
+  right: clamp(-21px, -4.6vw, -17px);
   color: var(--gold);
 }
 @media (max-width: 380px) {
-  .mobile-quicknav { gap: 11px; }
+  .mobile-quicknav { gap: 14px; }
   .mobile-quicknav a { font-size: 9px; }
-  .mobile-quicknav a:not(:last-child)::after { right: -8px; }
+  .mobile-quicknav a:not(:last-child)::after { right: -10px; }
 }
 
 /* ===== Mobile / overlay menu ===== */
@@ -538,7 +538,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   margin-bottom: clamp(28px, 5vw, 48px);
 }
 .section-desc {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
   max-width: 340px;
   line-height: 1.6;
@@ -570,20 +570,20 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .footer-fullform {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 14.5px;
+  font-size: 15.5px;
   color: var(--gold-text);
   margin-top: 10px;
   line-height: 1.4;
 }
 .footer-tagline {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--muted);
   line-height: 1.6;
   max-width: 320px;
   margin-top: 10px;
 }
 .footer-nav { display: flex; flex-wrap: wrap; gap: 20px 28px; }
-.footer-nav a { font-size: 13.5px; letter-spacing: .05em; }
+.footer-nav a { font-size: 14.5px; letter-spacing: .05em; }
 .footer-nav a:hover, .footer-nav a:focus-visible { color: var(--gold-text); }
 .footer-bottom {
   margin-top: 40px;
@@ -637,13 +637,13 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 .admin-login-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
 .admin-login-field label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--ink);
 }
 .admin-login-field input {
   font: inherit;
-  font-size: 15px;
+  font-size: 16px;
   padding: 12px 14px;
   border: 1px solid rgba(32, 24, 16, .18);
   border-radius: 10px;
@@ -659,7 +659,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   background: var(--gold);
   color: var(--ivory);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 15px;
   letter-spacing: .06em;
   text-transform: uppercase;
   padding: 13px 20px;
@@ -670,7 +670,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .admin-login-submit:disabled { opacity: .6; cursor: not-allowed; }
 .admin-login-error {
   min-height: 18px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: #B3261E;
   margin: 0 0 12px;
 }
