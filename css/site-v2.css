@@ -1650,11 +1650,12 @@ button.career-card {
   width: clamp(96px, 10vw, 132px);
   height: auto;
   flex: none;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .2));
+  background: var(--ivory-deep);
+  border-radius: 18px;
+  padding: 10px 14px;
+  box-shadow: 0 4px 14px rgba(32, 24, 16, .14);
 }
-.page-banner-logo-text { text-align: left; }
-.page-banner-logo-text .page-banner-title { margin: 0; }
-.page-banner-logo-text .page-banner-eyebrow { margin: 6px 0 0; }
+.page-banner-logo-row .page-banner-title { margin: 0; }
 
 /* ===== Fact grid (label/value pairs, e.g. program quick facts) ===== */
 .fact-grid {
@@ -1688,7 +1689,7 @@ button.career-card {
   margin: clamp(24px, 5vw, 36px) 0;
 }
 .founder-iiwm-mark img {
-  width: clamp(140px, 22vw, 200px);
+  width: clamp(180px, 30vw, 260px);
   height: auto;
 }
 
