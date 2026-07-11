@@ -3,7 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>document.documentElement.classList.add('js');</script>
+<script>
+document.documentElement.classList.add('js');
+if (sessionStorage.getItem('iiwmHomeIntroShown')) {
+  document.documentElement.classList.add('no-intro');
+} else {
+  sessionStorage.setItem('iiwmHomeIntroShown', '1');
+}
+</script>
 <title>IIWM Bangalore — India's First Residential Wedding Training Program</title>
 <meta name="description" content="IIWM Bangalore is India's first residential wedding training program. Turn your passion for weddings into a prestigious career — mentors, internships and placement assistance.">
 <meta name="theme-color" content="#FDF3EC">

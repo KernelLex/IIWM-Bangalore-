@@ -73,6 +73,10 @@ main p strong { font-weight: 800; color: var(--maroon); }
   background: #FCF0E2;
   animation: preloader-out 3s cubic-bezier(.65, 0, .35, 1) forwards;
 }
+/* Homepage only: skip the intro on repeat visits within the same
+   browser session (index.html sets .no-intro via sessionStorage).
+   quiz.html never sets this class, so its preloader is unaffected. */
+.no-intro #preloader { display: none; }
 #preloader::before {
   content: "";
   position: absolute;
