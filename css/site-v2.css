@@ -1638,16 +1638,17 @@ button.career-card {
 .footer-social svg { width: 14px; height: 14px; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 
-/* ===== About page banner: logo beside the title, not stacked above it ===== */
+/* ===== About page banner: logo stacked above the title ===== */
 .page-banner-logo-row {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(14px, 2.4vw, 24px);
+  gap: clamp(12px, 2.4vw, 20px);
   margin-bottom: 14px;
 }
 .page-banner-logo {
-  width: clamp(96px, 10vw, 132px);
+  width: clamp(110px, 14vw, 156px);
   height: auto;
   flex: none;
   background: var(--ivory-deep);
