@@ -1598,12 +1598,12 @@ button.career-card {
 .footer-brand .wordmark-main { color: var(--maroon); }
 .footer-cols {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 32px;
   margin-top: 8px;
 }
-@media (min-width: 640px) { .footer-cols { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1000px) { .footer-cols { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 640px) { .footer-cols { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .footer-cols { grid-template-columns: repeat(4, 1fr); } }
 .footer-col {
   /* Grid items default to a content-based min-width, so a long unbroken
      token (the contact email) would otherwise force this column wider
