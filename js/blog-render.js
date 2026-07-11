@@ -4,8 +4,6 @@
 import { db } from "./firebase-init.js";
 import { collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-var PLACEHOLDER_TONES = ['ph-1', 'ph-2', 'ph-3', 'ph-4', 'ph-5', 'ph-6'];
-
 function escapeHtml(str) {
   return String(str == null ? '' : str)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -28,7 +26,6 @@ function renderGrid(posts) {
   var grid = document.getElementById('blogGrid');
   grid.innerHTML = posts.map(function (post, i) {
     return '<article class="blog-card">' +
-      '<div class="blog-card-media ' + PLACEHOLDER_TONES[i % PLACEHOLDER_TONES.length] + '"></div>' +
       '<div class="blog-card-body">' +
       '<p class="blog-card-date">' + escapeHtml(post.dateLabel || '') + '</p>' +
       '<h3>' + escapeHtml(post.title) + '</h3>' +

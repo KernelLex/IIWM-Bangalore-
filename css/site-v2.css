@@ -2001,8 +2001,7 @@ button.career-card {
   display: flex;
   flex-direction: column;
 }
-.blog-card-media { aspect-ratio: 16/10; }
-.blog-card-body { padding: 22px 22px 26px; }
+.blog-card-body { padding: 26px 22px; }
 .blog-card-date { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-text); }
 .blog-card h3 { font-family: var(--font-serif); font-size: 19px; font-weight: 600; color: var(--ink); margin-top: 8px; line-height: 1.3; }
 .blog-card p { font-size: 15px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
@@ -2022,7 +2021,7 @@ button.career-card {
 .blog-post-overlay[hidden] { display: none; }
 .blog-post-modal {
   width: 100%;
-  max-width: 680px;
+  max-width: 840px;
   background: var(--white);
   border-radius: var(--radius-card);
   padding: clamp(28px, 5vw, 44px);
