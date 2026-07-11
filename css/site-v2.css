@@ -1767,6 +1767,14 @@ button.career-card {
   color: var(--ink);
   line-height: 1.18;
 }
+.content-block h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(21px, 2.4vw, 26px);
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
 .content-block p {
   font-size: 16px;
   color: var(--muted);
@@ -1865,6 +1873,11 @@ button.career-card {
 }
 .timeline-v2-item h4 { font-family: var(--font-serif); font-size: 17px; color: var(--ink); font-weight: 600; }
 .timeline-v2-item p { font-size: 15px; color: var(--muted); margin-top: 4px; line-height: 1.55; }
+
+/* Curriculum page: bigger, bolder intro heading and week titles so the
+   module-by-module build reads as the page's main event. */
+#curriculum .content-block h2 { font-weight: 700; font-size: clamp(32px, 4.4vw, 50px); }
+#curriculum .timeline-v2-item h4 { font-size: clamp(20px, 2.4vw, 24px); font-weight: 800; color: var(--maroon); }
 
 /* ===== Homepage "How to Apply" — two steps (send resume / counselling),
    maroon icon-circles joined by a dotted connector, mirroring the
